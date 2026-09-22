@@ -1,0 +1,19 @@
+create or replace TRIGGER trg_lwf_leave_update
+AFTER INSERT OR UPDATE ON LWF_LEAVES
+FOR EACH ROW
+BEGIN
+    IF :NEW.STATUS = 'APPROVED' 
+       AND NVL(:OLD.STATUS, 'X') != 'APPROVED' THEN
+
+        UPDATE LWF_LEAVES_TAKEN
+        SET 
+            USED_LEAVES = NVL(USED_LEAVES, 0) + :NEW.LEAVE_DAYS,
+            AVAILABLE_LEAVES = TOTAL_ALLOCATED_LEAVE - 
+                               (NVL(USED_LEAVES, 0) + :NEW.LEAVE_DAYS)
+        WHERE USER_ID = :NEW.USER_ID
+          AND LEAVE_TYPE_ID = :NEW.LEAVE_TYPE_ID
+          AND YEAR = EXTRACT(YEAR FROM SYSDATE);
+
+    END IF;
+END;
+/
