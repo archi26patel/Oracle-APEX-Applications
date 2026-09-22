@@ -1,0 +1,93 @@
+create or replace PACKAGE pkg_data_validation AS
+
+    /*
+    ============================================================================
+    PACKAGE: PKG_DATA_VALIDATION
+
+    Purpose:
+      Validation framework for DEMO_DATA_LOAD employee data.
+
+    Return:
+      NULL        = Valid
+      Error text  = Invalid
+    ============================================================================
+    */
+
+    -- 1. Employee / Person Name
+    FUNCTION name (
+        p_name         IN VARCHAR2,
+        p_min_length   IN NUMBER DEFAULT 3,
+        p_field_label  IN VARCHAR2 DEFAULT 'Name'
+    ) RETURN VARCHAR2;
+
+
+    -- 2. Email Address
+    FUNCTION email (
+        p_email IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 3. Mobile / Phone Number
+    FUNCTION phone_number (
+        p_phone IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 4. Department
+    FUNCTION department (
+        p_department IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 5. Salary
+    FUNCTION salary (
+        p_salary IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 6. Bonus
+    FUNCTION bonus (
+        p_bonus IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 7. Experience Years
+    FUNCTION experience_years (
+        p_experience IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 8. Status
+    FUNCTION status (
+        p_status IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 9. Date Validation
+    FUNCTION valid_date (
+        p_date        IN VARCHAR2,
+        p_field_label IN VARCHAR2 DEFAULT 'Date'
+    ) RETURN VARCHAR2;
+
+
+    -- 10. Future Date Validation
+    FUNCTION future_date (
+        p_date        IN VARCHAR2,
+        p_field_label IN VARCHAR2 DEFAULT 'Date'
+    ) RETURN VARCHAR2;
+
+
+    -- 11. Date of Birth vs Joining Date
+    FUNCTION dob_before_joining (
+        p_dob          IN VARCHAR2,
+        p_joining_date IN VARCHAR2
+    ) RETURN VARCHAR2;
+
+
+    -- 12. Generic validity helper
+    FUNCTION is_valid (
+        p_error_msg IN VARCHAR2
+    ) RETURN BOOLEAN;
+
+END pkg_data_validation;
+/

@@ -1,0 +1,521 @@
+create or replace PACKAGE BODY pkg_data_validation AS
+
+    /*
+    ============================================================================
+    1. NAME VALIDATION
+    ============================================================================
+    */
+    FUNCTION name (
+        p_name         IN VARCHAR2,
+        p_min_length   IN NUMBER DEFAULT 3,
+        p_field_label  IN VARCHAR2 DEFAULT 'Name'
+    ) RETURN VARCHAR2
+    IS
+        l_name VARCHAR2(4000);
+    BEGIN
+
+        l_name := TRIM(p_name);
+
+        IF l_name IS NULL THEN
+            RETURN p_field_label || ' is required';
+        END IF;
+
+        IF LENGTH(l_name) < p_min_length THEN
+            RETURN p_field_label || ' must be at least '
+                   || p_min_length || ' characters long';
+        END IF;
+
+        /*
+           Allows:
+           A-Z
+           a-z
+           Spaces
+           Dot
+           Apostrophe
+           Hyphen
+        */
+        IF NOT REGEXP_LIKE(
+               l_name,
+               '^[A-Za-z .''-]+$'
+           )
+        THEN
+            RETURN p_field_label
+                   || ' contains invalid characters';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate ' || p_field_label;
+    END name;
+
+
+    /*
+    ============================================================================
+    2. EMAIL VALIDATION
+    ============================================================================
+    */
+    FUNCTION email (
+        p_email IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_email VARCHAR2(4000);
+    BEGIN
+
+        l_email := LOWER(TRIM(p_email));
+
+        IF l_email IS NULL THEN
+            RETURN 'Email is required';
+        END IF;
+
+        IF LENGTH(l_email) > 254 THEN
+            RETURN 'Email is too long';
+        END IF;
+
+        IF NOT REGEXP_LIKE(
+               l_email,
+               '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+           )
+        THEN
+            RETURN 'Invalid email address';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate email';
+    END email;
+
+
+    /*
+    ============================================================================
+    3. PHONE NUMBER VALIDATION
+    ============================================================================
+    */
+    FUNCTION phone_number (
+        p_phone IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_phone VARCHAR2(100);
+    BEGIN
+
+        l_phone := TRIM(REGEXP_REPLACE(p_phone, '\.0$', ''));
+
+        IF l_phone IS NULL THEN
+            RETURN 'Mobile number is required';
+        END IF;
+
+        /*
+           Indian 10-digit mobile number.
+           Starts with 6, 7, 8 or 9.
+        */
+        IF NOT REGEXP_LIKE(
+               l_phone,
+               '^[6-9][0-9]{9}$'
+           )
+        THEN
+            RETURN 'Invalid mobile number. Enter a valid 10-digit mobile number';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate mobile number';
+    END phone_number;
+
+
+    /*
+    ============================================================================
+    4. DEPARTMENT VALIDATION
+    ============================================================================
+    */
+    FUNCTION department (
+        p_department IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_department VARCHAR2(100);
+    BEGIN
+
+        l_department := UPPER(TRIM(p_department));
+
+        IF l_department IS NULL THEN
+            RETURN 'Department is required';
+        END IF;
+
+        /*
+           Basic department validation.
+           You can modify this list according to your application.
+        */
+        IF l_department NOT IN (
+            'IT',
+            'HR',
+            'FINANCE',
+            'SALES',
+            'MARKETING',
+            'ADMIN',
+            'OPERATIONS',
+            'LEGAL'
+        )
+        THEN
+            RETURN 'Invalid Department';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate department';
+    END department;
+
+
+    /*
+    ============================================================================
+    5. SALARY VALIDATION
+    ============================================================================
+    */
+    FUNCTION salary (
+        p_salary IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_salary NUMBER;
+    BEGIN
+
+        IF TRIM(p_salary) IS NULL THEN
+            RETURN 'Salary is required';
+        END IF;
+
+        l_salary :=
+            TO_NUMBER(
+                TRIM(p_salary)
+                DEFAULT NULL ON CONVERSION ERROR
+            );
+
+        IF l_salary IS NULL THEN
+            RETURN 'Salary must be a valid number';
+        END IF;
+
+        IF l_salary < 0 THEN
+            RETURN 'Salary cannot be negative';
+        END IF;
+
+        IF l_salary = 0 THEN
+            RETURN 'Salary must be greater than zero';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Invalid salary';
+    END salary;
+
+
+    /*
+    ============================================================================
+    6. BONUS VALIDATION
+    ============================================================================
+    */
+    FUNCTION bonus (
+        p_bonus IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_bonus NUMBER;
+    BEGIN
+
+        IF TRIM(p_bonus) IS NULL THEN
+            RETURN 'Bonus is required';
+        END IF;
+
+        l_bonus :=
+            TO_NUMBER(
+                TRIM(p_bonus)
+                DEFAULT NULL ON CONVERSION ERROR
+            );
+
+        IF l_bonus IS NULL THEN
+            RETURN 'Bonus must be a valid number';
+        END IF;
+
+        IF l_bonus < 0 THEN
+            RETURN 'Bonus cannot be negative';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Invalid bonus';
+    END bonus;
+
+
+    /*
+    ============================================================================
+    7. EXPERIENCE YEARS VALIDATION
+    ============================================================================
+    */
+    FUNCTION experience_years (
+        p_experience IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_experience NUMBER;
+    BEGIN
+
+        IF TRIM(p_experience) IS NULL THEN
+            RETURN 'Experience Years is required';
+        END IF;
+
+        l_experience :=
+            TO_NUMBER(
+                TRIM(p_experience)
+                DEFAULT NULL ON CONVERSION ERROR
+            );
+
+        IF l_experience IS NULL THEN
+            RETURN 'Experience Years must be a valid number';
+        END IF;
+
+        IF l_experience < 0 THEN
+            RETURN 'Experience Years cannot be negative';
+        END IF;
+
+        IF l_experience > 60 THEN
+            RETURN 'Experience Years cannot be greater than 60';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Invalid Experience Years';
+    END experience_years;
+
+
+    /*
+    ============================================================================
+    8. STATUS VALIDATION
+    ============================================================================
+    */
+    FUNCTION status (
+        p_status IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_status VARCHAR2(50);
+    BEGIN
+
+        l_status := UPPER(TRIM(p_status));
+
+        IF l_status IS NULL THEN
+            RETURN 'Status is required';
+        END IF;
+
+        IF l_status NOT IN ('ACTIVE', 'INACTIVE') THEN
+            RETURN 'Invalid Status. Allowed values are ACTIVE or INACTIVE';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate status';
+    END status;
+
+
+    /*
+    ============================================================================
+    9. DATE VALIDATION
+    Supports:
+      YYYY-MM-DD
+      DD/MM/YYYY
+      DD-MON-YYYY
+    ============================================================================
+    */
+    FUNCTION valid_date (
+        p_date        IN VARCHAR2,
+        p_field_label IN VARCHAR2 DEFAULT 'Date'
+    ) RETURN VARCHAR2
+    IS
+        l_date DATE;
+    BEGIN
+
+        IF TRIM(p_date) IS NULL THEN
+            RETURN p_field_label || ' is required';
+        END IF;
+
+        l_date := COALESCE(
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'YYYY-MM-DD'
+            ),
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD/MM/YYYY'
+            ),
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD-MON-YYYY'
+            )
+        );
+
+        IF l_date IS NULL THEN
+            RETURN 'Invalid ' || p_field_label;
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Invalid ' || p_field_label;
+    END valid_date;
+
+
+    /*
+    ============================================================================
+    10. FUTURE DATE VALIDATION
+    ============================================================================
+    */
+    FUNCTION future_date (
+        p_date        IN VARCHAR2,
+        p_field_label IN VARCHAR2 DEFAULT 'Date'
+    ) RETURN VARCHAR2
+    IS
+        l_date DATE;
+    BEGIN
+
+        IF TRIM(p_date) IS NULL THEN
+            RETURN p_field_label || ' is required';
+        END IF;
+
+        l_date := COALESCE(
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'YYYY-MM-DD'
+            ),
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD/MM/YYYY'
+            ),
+            TO_DATE(
+                TRIM(p_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD-MON-YYYY'
+            )
+        );
+
+        IF l_date IS NULL THEN
+            RETURN 'Invalid ' || p_field_label;
+        END IF;
+
+        IF l_date > TRUNC(SYSDATE) THEN
+            RETURN p_field_label || ' cannot be a future date';
+        END IF;
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Invalid ' || p_field_label;
+    END future_date;
+
+
+    /*
+    ============================================================================
+    11. DOB MUST BE BEFORE JOINING DATE
+    ============================================================================
+    */
+    FUNCTION dob_before_joining (
+        p_dob          IN VARCHAR2,
+        p_joining_date IN VARCHAR2
+    ) RETURN VARCHAR2
+    IS
+        l_dob          DATE;
+        l_joining_date DATE;
+    BEGIN
+
+        IF TRIM(p_dob) IS NULL
+           OR TRIM(p_joining_date) IS NULL
+        THEN
+            RETURN NULL;
+        END IF;
+
+
+        l_dob := COALESCE(
+            TO_DATE(
+                TRIM(p_dob)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'YYYY-MM-DD'
+            ),
+            TO_DATE(
+                TRIM(p_dob)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD/MM/YYYY'
+            ),
+            TO_DATE(
+                TRIM(p_dob)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD-MON-YYYY'
+            )
+        );
+
+
+        l_joining_date := COALESCE(
+            TO_DATE(
+                TRIM(p_joining_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'YYYY-MM-DD'
+            ),
+            TO_DATE(
+                TRIM(p_joining_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD/MM/YYYY'
+            ),
+            TO_DATE(
+                TRIM(p_joining_date)
+                DEFAULT NULL ON CONVERSION ERROR,
+                'DD-MON-YYYY'
+            )
+        );
+
+
+        IF l_dob IS NULL OR l_joining_date IS NULL THEN
+            RETURN NULL;
+        END IF;
+
+
+        IF l_dob >= l_joining_date THEN
+            RETURN 'Date of Birth must be before Joining Date';
+        END IF;
+
+
+        RETURN NULL;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN 'Unable to validate Date of Birth and Joining Date';
+    END dob_before_joining;
+
+
+    /*
+    ============================================================================
+    12. IS_VALID HELPER
+    ============================================================================
+    */
+    FUNCTION is_valid (
+        p_error_msg IN VARCHAR2
+    ) RETURN BOOLEAN
+    IS
+    BEGIN
+
+        RETURN p_error_msg IS NULL;
+
+    END is_valid;
+
+END pkg_data_validation;
+/
