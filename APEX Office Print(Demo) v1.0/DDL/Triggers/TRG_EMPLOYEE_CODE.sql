@@ -1,0 +1,11 @@
+create or replace TRIGGER "TRG_EMPLOYEE_CODE" 
+BEFORE INSERT
+ON AOP_DEMO_EMPLOYEE_MASTER
+FOR EACH ROW
+BEGIN
+    -- Generate EMP_CODE only if not provided
+    IF :NEW.EMP_CODE IS NULL THEN
+        :NEW.EMP_CODE := 'EMP' || LPAD(:NEW.EMP_ID, 4, '0');
+    END IF;
+END;
+/
