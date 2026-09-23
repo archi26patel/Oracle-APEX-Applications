@@ -1,0 +1,8 @@
+create or replace PACKAGE TA_PACKAGE AS
+
+    FUNCTION GET_AGE (
+        P_DOB IN DATE
+    ) RETURN VARCHAR2;
+
+END TA_PACKAGE;
+/
