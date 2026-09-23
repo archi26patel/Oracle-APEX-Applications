@@ -1,0 +1,23 @@
+create or replace TRIGGER 
+    "XXPI_STRIPE_RESPONSE_BIU" 
+BEFORE INSERT OR UPDATE 
+ON "XXPI_STRIPE_RESPONSE" 
+FOR EACH ROW 
+BEGIN 
+    IF INSERTING THEN 
+        :NEW.CREATED := GET_IST_SYSTIMESTAMP; 
+        :NEW.CREATED_BY := 
+            COALESCE( 
+                SYS_CONTEXT('APEX$SESSION','APP_USER'), 
+                USER 
+            ); 
+    END IF; 
+ 
+    :NEW.UPDATED := GET_IST_SYSTIMESTAMP; 
+    :NEW.UPDATED_BY := 
+        COALESCE( 
+            SYS_CONTEXT('APEX$SESSION','APP_USER'), 
+            USER 
+        ); 
+END XXPI_STRIPE_RESPONSE_BIU;
+/
