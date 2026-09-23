@@ -1,0 +1,23 @@
+create or replace TRIGGER trg_lwf_user_leave_ai
+AFTER INSERT ON LWF_USERS
+FOR EACH ROW
+BEGIN
+    INSERT INTO LWF_LEAVES_TAKEN (
+        LEAVE_TYPE_ID,
+        USER_ID,
+        TOTAL_ALLOCATED_LEAVE,
+        USED_LEAVES,
+        AVAILABLE_LEAVES,
+        YEAR
+    )
+    SELECT 
+        lt.LEAVE_ID,
+        :NEW.USER_ID,
+        lt.TOTAL_ALLOCATED_LEAVES,
+        0,
+        lt.TOTAL_ALLOCATED_LEAVES,
+        EXTRACT(YEAR FROM SYSDATE)
+    FROM LWF_LEAVE_TYPE lt;
+
+END;
+/
