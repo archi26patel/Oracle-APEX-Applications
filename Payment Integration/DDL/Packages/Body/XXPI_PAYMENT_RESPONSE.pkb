@@ -38,8 +38,8 @@ create or replace PACKAGE BODY XXPI_PAYMENT_RESPONSE AS
     l_resp_clob := apex_web_service.make_rest_request( 
         p_url         => 'https://api.razorpay.com/v1/orders',   
         p_http_method => 'POST',                                    
-        p_username    => 'test_username
-        p_password    => 'test_password
+        p_username    => 'test_username',
+        p_password    => 'test_password',
         p_body        => l_body_clob 
     ); 
  
