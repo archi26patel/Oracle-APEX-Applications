@@ -1,0 +1,79 @@
+create or replace PACKAGE PKG_GINNING_CALCULATOR AS
+
+    PROCEDURE P_CALCULATE_PARITY (
+        P_KAPAS_RATE         IN  NUMBER,
+        P_KAPAS_UNIT         IN  NUMBER,
+        P_SEED_RATE          IN  NUMBER,
+        P_SEED_UNIT          IN  NUMBER,
+        P_EXPENSE_PER_MAUND  IN  NUMBER,
+        P_EXPECTED_GOT       IN  NUMBER,
+        P_EXPECTED_SHORTAGE  IN  NUMBER,
+        P_PARITY_COST        OUT VARCHAR2
+    );
+
+    PROCEDURE P_CALCULATE_REVERSE_PARITY (
+        P_LINT_PRICE         IN  NUMBER,
+        P_SEED_PRICE         IN  NUMBER,
+        P_SEED_UNIT          IN  NUMBER,
+        P_EXPENSE            IN  NUMBER,
+        P_GOT                IN  NUMBER,
+        P_SHORTAGE           IN  NUMBER,
+        P_LINT_YIELD_KG      OUT VARCHAR2,
+        P_SEED_YIELD_KG      OUT VARCHAR2,
+        P_LINT_VALUE         OUT VARCHAR2,
+        P_SEED_VALUE         OUT VARCHAR2,
+        P_TOTAL_REALIZATION  OUT VARCHAR2,
+        P_MAX_KAPAS_RATE     OUT VARCHAR2,  ---   
+        P_REV_KAPAS_RATE     OUT VARCHAR2
+    );
+
+    
+    PROCEDURE P_CALCULATE_OUTPUT_RATIO (
+        P_INPUT_WEIGHT   IN NUMBER,
+        P_LINT_WEIGHT    IN NUMBER,
+        P_SEED_WEIGHT    IN NUMBER,
+        P_WASTE_WEIGHT   IN NUMBER,
+        P_WEIGHT_UNIT    IN VARCHAR2,
+        P_LINT_PERCENT OUT NUMBER,
+        P_SEED_PERCENT OUT NUMBER,
+        P_WASTE_PERCENT OUT NUMBER,
+        P_TOTAL_PERCENT OUT NUMBER,
+        P_IS_BALANCED OUT VARCHAR2
+    );
+
+
+
+    -- 1. GINNING PARITY FUNCTION
+    FUNCTION F_CALCULATE_PARITY (
+        P_KAPAS_RATE         IN  NUMBER,
+        P_KAPAS_UNIT         IN  NUMBER,
+        P_SEED_RATE          IN  NUMBER,
+        P_SEED_UNIT          IN  NUMBER,
+        P_EXPENSE_PER_MAUND  IN  NUMBER,
+        P_EXPECTED_GOT       IN  NUMBER,
+        P_EXPECTED_SHORTAGE  IN  NUMBER
+    ) RETURN VARCHAR2;
+
+    -- 2. REVERSE PARITY FUNCTION (Returns only MAX_KAPAS_RATE)
+    FUNCTION F_CALCULATE_REVERSE_PARITY (
+        P_LINT_PRICE         IN  NUMBER,
+        P_SEED_PRICE         IN  NUMBER,
+        P_SEED_UNIT          IN  NUMBER,
+        P_EXPENSE            IN  NUMBER,
+        P_GOT                IN  NUMBER,
+        P_SHORTAGE           IN  NUMBER
+    ) RETURN VARCHAR2;
+
+    -- 3. OUTPUT RATIO FUNCTION (Returns percentage based on P_PERCENTAGE_TYPE)
+    FUNCTION F_CALCULATE_OUTPUT_RATIO (
+        P_INPUT_WEIGHT       IN NUMBER,
+        P_LINT_WEIGHT        IN NUMBER,
+        P_SEED_WEIGHT        IN NUMBER,
+        P_WASTE_WEIGHT       IN NUMBER,
+        P_WEIGHT_UNIT        IN VARCHAR2,  -- 'G', 'KG'
+        P_PERCENTAGE_TYPE    IN VARCHAR2  -- 'LINT', 'SEED', 'WASTE', or 'TOTAL'
+    ) RETURN VARCHAR2;
+
+
+END PKG_GINNING_CALCULATOR;
+/
