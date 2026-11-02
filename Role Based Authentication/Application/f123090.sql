@@ -19,7 +19,7 @@ whenever sqlerror exit sql.sqlcode rollback
 begin
 wwv_flow_imp.import_begin (
  p_version_yyyy_mm_dd=>'2026.04.07'
-,p_release=>'26.2.0'
+,p_release=>'26.2.1'
 ,p_default_workspace_id=>20575405984736225816
 ,p_default_application_id=>123090
 ,p_default_id_offset=>0
@@ -33,25 +33,26 @@ prompt APPLICATION 123090 - Role Based Authentication
 -- Application Export:
 --   Application:     123090
 --   Name:            Role Based Authentication
---   Date and Time:   10:42 Friday October 23, 2026
+--   Date and Time:   10:09 Monday November 2, 2026
 --   Exported By:     ARCHIPATEL2632004@GMAIL.COM
 --   Flashback:       0
 --   Export Type:     Application Export
---     Pages:                     20
+--     Pages:                     21
 --       Items:                   71
 --       Validations:             15
 --       Processes:               26
---       Regions:                 33
---       Buttons:                 37
---       Dynamic Actions:         10
+--       Regions:                 34
+--       Buttons:                 38
+--       Dynamic Actions:         11
 --     Shared Components:
 --       Logic:
 --         Items:                  6
 --         Build Options:          1
+--         AI Agents:              1
 --       Navigation:
 --         Lists:                  3
 --         Breadcrumbs:            1
---           Entries:             11
+--           Entries:             12
 --       Security:
 --         Authentication:         2
 --         Authorization:          1
@@ -64,7 +65,7 @@ prompt APPLICATION 123090 - Role Based Authentication
 --       Reports:
 --       E-Mail:
 --     Supporting Objects:  Included
---   Version:         26.2.0
+--   Version:         26.2.1
 --   Instance ID:     63113759365424
 --
 
@@ -109,12 +110,12 @@ wwv_imp_workspace.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Role Based Authentication'
 ,p_created_on=>wwv_flow_imp.dz('20261022064850Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261023102149Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261031070615Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_file_prefix=>nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>2461336065530
-,p_version_scn=>'15848657092069'
+,p_version_scn=>'15851565630363'
 ,p_print_server_type=>'INSTANCE'
 ,p_file_storage=>'DB'
 ,p_is_pwa=>'Y'
@@ -362,6 +363,3152 @@ wwv_flow_imp_shared.create_plugin_setting(
 );
 end;
 /
+prompt --application/shared_components/ai_agent/role_based_authentication_record
+begin
+wwv_flow_imp_shared.create_ai_agent(
+ p_id=>wwv_flow_imp.id(8026577617038066993)
+,p_name=>'Role Based Authentication Record'
+,p_static_id=>'role-based-authentication-record'
+,p_remote_server_id=>10668202078939215579
+,p_system_prompt=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are an AI Assistant for an Oracle APEX Role Based Authentication Application. Help users manage Users, Roles, Pages, Role-Page Access, Navigation Menus, and Role Home Pages using configured tools.',
+'',
+'Be professional, friendly, accurate, and understand English, Hindi, and Hinglish.',
+'',
+'## MODULES',
+'',
+unistr('**1. Users \2013 DEMO_USER_MASTER**'),
+'Create, retrieve, update, and delete users. Creation requires First Name, Last Name, Email, Password, and Role. Middle Name and Mobile are optional. Email must be unique. Never reveal passwords or hashes.',
+'',
+unistr('**2. Roles \2013 DEMO_ROLE_MASTER**'),
+'Create, retrieve, update, and delete roles. Role names must be unique. Priority must be non-negative. IS_ACTIVE accepts Y/N; default Y.',
+'',
+unistr('**3. Pages \2013 DEMO_PAGE_MASTER**'),
+'Register, retrieve, update, and delete pages. Select APEX_PAGE_ID from the application pages LOV. PAGE_NAME and APEX_PAGE_ID must be unique. PAGE_ID is the database ID; APEX_PAGE_ID is the actual APEX page number. Never confuse them.',
+'',
+unistr('**4. Role-Page Access \2013 DEMO_ROLE_PAGE_ACCESS_MASTER**'),
+'Create, retrieve, update, and delete assignments. Use active role and page LOVs. Each ROLE_ID + PAGE_ID combination must be unique. Always use PAGE_ID, not APEX_PAGE_ID.',
+'',
+unistr('**5. Navigation Menus \2013 DEMO_NAVIGATION_MENU_MASTER**'),
+'Create, retrieve, update, and delete menus. MENU_SEQ_ID must be positive and unique. MENU_NAME and APEX_PAGE_ID are fetched from the selected registered page. Use valid active parent menus. Prevent self-parenting and circular hierarchies.',
+'',
+unistr('**6. Role Home Pages \2013 DEMO_ROLE_HOME_PAGES**'),
+'Tools: CREATE_ROLE_HOME_PAGE, GET_ROLE_HOME_PAGE, UPDATE_ROLE_HOME_PAGE, DELETE_ROLE_HOME_PAGE.',
+'Each role can have one default home page. Select ROLE_ID and HOME_PAGE_ID using active role and page LOVs. HOME_PAGE_ID must be PAGE_ID, never APEX_PAGE_ID. PAGE_NAME is fetched automatically. Check existing assignments before creation. Recommend upd'
+||'ate if one exists. Identify updates by ROLE_HOME_ID. Preserve unspecified fields. Before deletion, explain the impact and obtain confirmation. Never delete the actual role or page.',
+'',
+'## AUTHORIZATION',
+'Roles: ADMIN, MANAGER, EMPLOYEE.',
+'ADMIN can manage all modules subject to application permissions. MANAGER and EMPLOYEE can perform only explicitly authorized operations. Always verify actual user permissions. Never allow users to grant themselves privileges. If authorization cannot '
+||'be verified, refuse restricted operations. Server-side authorization is authoritative.',
+'',
+'## TOOLS',
+'Use only configured tools:',
+'CREATE_USER, GET_USER, UPDATE_USER, DELETE_USER;',
+'CREATE_ROLE_MASTER, GET_ROLE_MASTER, UPDATE_ROLE_MASTER, DELETE_ROLE_MASTER;',
+'CREATE_PAGE_MASTER, GET_PAGE_MASTER, UPDATE_PAGE_MASTER, DELETE_PAGE_MASTER;',
+'CREATE_ROLE_PAGE_ACCESS, GET_ROLE_PAGE_ACCESS, UPDATE_ROLE_PAGE_ACCESS, DELETE_ROLE_PAGE_ACCESS;',
+'CREATE_NAVIGATION_MENU, GET_NAVIGATION_MENU_MASTER, UPDATE_NAVIGATION_MENU, DELETE_NAVIGATION_MENU;',
+'CREATE_ROLE_HOME_PAGE, GET_ROLE_HOME_PAGE, UPDATE_ROLE_HOME_PAGE, DELETE_ROLE_HOME_PAGE.',
+'',
+'Never invent tools, IDs, records, or results. Use LOVs for roles, pages, and parent menus. Collect required parameters. Do not request values that tools fetch automatically.',
+'',
+'## DELETE RULES',
+'Retrieve the record, explain its impact and dependencies, and obtain explicit confirmation before deletion. Warn about cascade deletion.',
+'',
+'## TOOL RESULTS',
+'Tools may return messages through APEX_AI.SET_TOOL_RESULT. SUCCESS means completed. For validation errors, explain the correction. For missing records, request a valid ID. Never expose raw SQL errors. Never claim success without tool confirmation or '
+||'automatically retry deletion.',
+'',
+'## RESPONSE RULES',
+'Display readable names, useful IDs, and active/inactive status. Never reveal passwords, hashes, or confidential information. Ask one direct question when information is missing. Prioritize security, accuracy, privacy, and data integrity.'))
+,p_welcome_message=>wwv_flow_string.join(wwv_flow_t_varchar2(
+unistr('<strong>\D83D\DC4B Welcome to the Role-Based Authentication AI Agent!</strong><br>'),
+'',
+'I''m your intelligent assistant for managing the application''s role-based authentication and access control system.<br>',
+'',
+'I can help you perform authorized CRUD operations across the following seven tables:',
+'',
+'<strong>Users</strong>  Create, view, update, and manage user accounts.',
+'<strong>Roles</strong>  Manage roles and role priorities.',
+'<strong>User Role Access</strong>  Assign roles to users and manage assignments.',
+'<strong>Pages</strong>  Register and manage application pages.',
+'<strong>Role Page Access</strong>  Control which pages each role can access.',
+'<strong>Role Home Pages</strong>  Configure the default landing page for each role.',
+'<strong>Navigation Menus</strong>  Manage menu items, hierarchy, icons, and page mappings.<br><br>',
+'',
+'<strong>What would you like to do today?</strong><br>',
+'',
+'You can ask me to:<br>',
+'- Create a new user or role.<br>',
+'- Search for users by email or status.<br>',
+'- Update user or role details.<br>',
+'- Assign or revoke roles.<br>',
+'- Configure page access permissions.<br>',
+'- Set a role''s default home page.<br>',
+'- Create, update, or manage navigation menus.<br><br>',
+'',
+unistr('<strong>\D83D\DD12 Security First: I''ll follow the configured permissions and validation rules. Passwords and password hashes are sensitive and will not be displayed in responses.</strong><br>'),
+'',
+'Simply describe your request in natural language, and I''ll help you complete the appropriate operation.'))
+,p_version_scn=>'SH256:NNqtPVQqa-EP0IOrMEUlLbyxVW3Z68YYYpamJY9zytE'
+,p_created_on=>wwv_flow_imp.dz('20261026123905Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031070615Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8780073332463718741)
+,p_tool_name=>'create_navigation_menu_master'
+,p_static_id=>'create-navigation-menu-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'When creating a navigation menu, retrieve available active pages from DEMO_PAGE_MASTER and let the user select a page.',
+'',
+'Pass the selected DEMO_PAGE_MASTER.PAGE_ID as P_PAGE_ID. MENU_NAME and APEX_PAGE_ID are populated automatically from the selected page record. Never ask the user to enter these two values separately.',
+'',
+'Collect MENU_SEQ_ID and any optional menu description, parent menu, icon, icon class, and active status. Default IS_ACTIVE to Y when omitted.',
+'',
+'Validate the selected page and parent menu before creating the record. Do not create a duplicate or execute the tool if required information is missing. Report success only after the database confirms insertion.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_COUNT       NUMBER;',
+    '    L_PAGE_NAME   DEMO_PAGE_MASTER.PAGE_NAME%TYPE;',
+    '    L_APEX_PAGE_ID DEMO_PAGE_MASTER.APEX_PAGE_ID%TYPE;',
+    'BEGIN',
+    '    SAVEPOINT CREATE_MENU_SP;',
+    '',
+    '    -- Validate menu sequence',
+    '    IF :P_MENU_SEQ_ID IS NULL OR :P_MENU_SEQ_ID <= 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Menu sequence is required and must be a positive number.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate page ID',
+    '    IF :P_PAGE_ID IS NULL OR :P_PAGE_ID <= 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please select a valid registered page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'', ''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate selected page and fetch page details',
+    '    BEGIN',
+    '        SELECT PAGE_NAME, APEX_PAGE_ID',
+    '        INTO L_PAGE_NAME, L_APEX_PAGE_ID',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE PAGE_ID = :P_PAGE_ID',
+    '          AND IS_ACTIVE = ''Y'';',
+    '    EXCEPTION',
+    '        WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Selected page does not exist or is inactive. Please select an available page.''',
+    '            );',
+    '            RETURN;',
+    '    END;',
+    '',
+    '    -- Validate parent menu',
+    '    IF :P_PARENT_MENU_ID IS NOT NULL THEN',
+    '        IF :P_PARENT_MENU_ID <= 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Invalid parent menu ID.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_NAVIGATION_MENU_MASTER',
+    '        WHERE MENU_ID = :P_PARENT_MENU_ID',
+    '          AND IS_ACTIVE = ''Y'';',
+    '',
+    '        IF L_COUNT = 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Selected parent menu does not exist or is inactive.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate menu sequence',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_NAVIGATION_MENU_MASTER',
+    '    WHERE MENU_SEQ_ID = :P_MENU_SEQ_ID;',
+    '',
+    '    IF L_COUNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This menu sequence already exists. Please use a different sequence.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Create navigation menu',
+    '    INSERT INTO DEMO_NAVIGATION_MENU_MASTER (',
+    '        MENU_SEQ_ID, MENU_NAME, MENU_DESCRIPTION,',
+    '        PARENT_MENU_ID, PAGE_ID, APEX_PAGE_ID,',
+    '        ICON, ICON_CLASS, IS_ACTIVE',
+    '    )',
+    '    VALUES (',
+    '        :P_MENU_SEQ_ID, L_PAGE_NAME, TRIM(:P_MENU_DESCRIPTION),',
+    '        :P_PARENT_MENU_ID, :P_PAGE_ID, L_APEX_PAGE_ID,',
+    '        TRIM(:P_ICON), TRIM(:P_ICON_CLASS),',
+    '        COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), ''Y'')',
+    '    );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Navigation menu created successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_MENU_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''A menu with the same unique value already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_MENU_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to create navigation menu due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071544Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780078301156718766)
+,p_param_name=>'P_ICON'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780079712008718769)
+,p_param_name=>'P_ICON_CLASS'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780080705613718773)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780074841100718755)
+,p_param_name=>'P_MENU_DESCRIPTION'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780074259478718751)
+,p_param_name=>'P_MENU_SEQ_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780076765984718763)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780075683679718759)
+,p_param_name=>'P_PARENT_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8690376649530051420)
+,p_tool_name=>'create_page_master'
+,p_static_id=>'create-page-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for creating new records in the DEMO_PAGE_MASTER table.',
+'',
+'Required fields:',
+'- APEX_PAGE_ID',
+'- PAGE_NAME',
+'',
+'Optional field:',
+'- IS_ACTIVE (defaults to Y).',
+'',
+'Instructions:',
+'',
+'1. When the user requests to create a new page master record, first call GET_AVAILABLE_APEX_PAGES to retrieve the available normal-mode pages from the current APEX application.',
+'',
+'2. Display the available pages using their PAGE_ID and PAGE_NAME. Present them in a clear numbered list so the user can select a page.',
+'',
+'3. The user must select an existing page from the returned list. Do not ask the user to type an APEX_PAGE_ID manually.',
+'',
+'4. After the user selects a page, use the selected PAGE_ID as APEX_PAGE_ID in DEMO_PAGE_MASTER. Use the corresponding PAGE_NAME as the default PAGE_NAME for the new page master record.',
+'',
+'5. If the user wants a different PAGE_NAME, ask them to provide it. Otherwise, use the selected APEX page''s name.',
+'',
+'6. Ask for IS_ACTIVE only if the user wants to specify it. If omitted, use Y. Accept only Y or N.',
+'',
+'7. Before inserting, call GET_PAGE_MASTER to check whether the selected APEX_PAGE_ID already exists in DEMO_PAGE_MASTER. If it already exists, do not insert a duplicate. Inform the user that the page is already registered.',
+'',
+'8. Do not call CREATE_PAGE_MASTER until the page selection is valid and all required values are available.',
+'',
+'9. PAGE_ID is generated automatically by the database. CREATED_AT, CREATED_BY, UPDATED_AT, and UPDATED_BY are maintained by database triggers. Never request these fields from the user.',
+'',
+'10. Execute the creation tool only once per creation request. Report success only after the database confirms the insert.',
+'',
+'11. If no available APEX pages are returned, inform the user and do not create a record.',
+'',
+'12. Never invent page IDs or page names. Use only the results returned by GET_AVAILABLE_APEX_PAGES.',
+'',
+'13. This tool must only create records. Do not use it to update or delete records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_COUNT NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT CREATE_PAGE_SP;',
+    '',
+    '    -- Validate required APEX Page ID',
+    '    IF :P_APEX_PAGE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''APEX Page ID is required. Please select a valid application page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate positive numeric Page ID',
+    '    IF :P_APEX_PAGE_ID <= 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid APEX Page ID. Please select a valid positive page number.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate page name',
+    '    IF TRIM(:P_PAGE_NAME) IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Page name is required.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    IF NOT REGEXP_LIKE(',
+    '        TRIM(:P_PAGE_NAME),',
+    '        ''^[A-Za-z][A-Za-z0-9 _-]*$''',
+    '    ) THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid page name. Use English letters, numbers, spaces, hyphens or underscores.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'', ''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate APEX Page ID',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_PAGE_MASTER',
+    '    WHERE APEX_PAGE_ID = :P_APEX_PAGE_ID;',
+    '',
+    '    IF L_COUNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This APEX Page ID is already registered.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate page name',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_PAGE_MASTER',
+    '    WHERE UPPER(TRIM(PAGE_NAME)) = UPPER(TRIM(:P_PAGE_NAME));',
+    '',
+    '    IF L_COUNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This page name already exists. Please use a different name.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Create page',
+    '    INSERT INTO DEMO_PAGE_MASTER (',
+    '        APEX_PAGE_ID,',
+    '        PAGE_NAME,',
+    '        IS_ACTIVE',
+    '    )',
+    '    VALUES (',
+    '        :P_APEX_PAGE_ID,',
+    '        TRIM(:P_PAGE_NAME),',
+    '        COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), ''Y'')',
+    '    );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Page registered successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_PAGE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This APEX Page ID or page name already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_PAGE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to register page due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071328Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690376929392051427)
+,p_param_name=>'P_APEX_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690377909504051430)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028055138Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690377489627051429)
+,p_param_name=>'P_PAGE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051236Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9635505097275081730)
+,p_tool_name=>'create_role_home_page'
+,p_static_id=>'create-role-home-page'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Use this tool to assign a default home page to a role. First display available active roles and registered pages. Collect ROLE_ID and HOME_PAGE_ID using their LOV return values. HOME_PAGE_ID must be DEMO_PAGE_MASTER.PAGE_ID, not APEX_PAGE_ID. PAGE_NA'
+||'ME is automatically fetched. Each role can have only one home page. If an assignment already exists, recommend updating it. Execute only for authorized users and report the actual tool result.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_CNT NUMBER;',
+    '    L_NAME DEMO_PAGE_MASTER.PAGE_NAME%TYPE;',
+    'BEGIN',
+    '    SAVEPOINT CREATE_HOME_SP;',
+    '',
+    '    IF :P_ROLE_ID IS NULL OR :P_HOME_PAGE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Please select a role and home page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Status must be Y or N.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE ROLE_ID=:P_ROLE_ID AND IS_ACTIVE=''Y'';',
+    '',
+    '    IF L_CNT=0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Selected role is invalid or inactive.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    BEGIN',
+    '        SELECT PAGE_NAME INTO L_NAME',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE PAGE_ID=:P_HOME_PAGE_ID',
+    '          AND IS_ACTIVE=''Y'';',
+    '    EXCEPTION',
+    '        WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result=>''Selected page is invalid or inactive.''',
+    '            );',
+    '            RETURN;',
+    '    END;',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_HOME_PAGES',
+    '    WHERE ROLE_ID=:P_ROLE_ID;',
+    '',
+    '    IF L_CNT>0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''This role already has a home page. Use the update tool.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    INSERT INTO DEMO_ROLE_HOME_PAGES(',
+    '        ROLE_ID,HOME_PAGE_ID,PAGE_NAME,IS_ACTIVE',
+    '    )',
+    '    VALUES(',
+    '        :P_ROLE_ID,:P_HOME_PAGE_ID,L_NAME,',
+    '        COALESCE(UPPER(TRIM(:P_IS_ACTIVE)),''Y'')',
+    '    );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result=>''SUCCESS: Role home page created successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''This role already has a home page.''',
+    '        );',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Unable to create role home page.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635505871565081739)
+,p_param_name=>'P_HOME_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635506391329081742)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635505334831081736)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063452Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8707461733103511473)
+,p_tool_name=>'create_role_master'
+,p_static_id=>'create-role-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for creating roles in DEMO_ROLE_MASTER.',
+'',
+'1. Collect ROLE_NAME from the user. Ask for it if missing.',
+'2. ROLE_PRIORITY is optional. If provided, it must be numeric.',
+'3. IS_ACTIVE is optional and defaults to Y. Accept only Y or N.',
+'4. Before creating a role, check existing roles using the role lookup tool, if available. Do not create a duplicate role name, ignoring case and surrounding spaces.',
+'5. Do not call the creation tool until all required fields are available and valid.',
+'6. Do not ask the user for ROLE_ID or audit fields; the database generates or maintains them.',
+'7. Execute the creation tool once per request.',
+'8. Report success only after the database confirms the insert.',
+'9. Report database errors accurately.',
+'10. Never use this tool to update or delete roles.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_COUNT NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT CREATE_ROLE_SP;',
+    '',
+    '    -- Validate required role name',
+    '    IF TRIM(:P_ROLE_NAME) IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role name is required. Please provide a role name.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role name format',
+    '    IF NOT REGEXP_LIKE(TRIM(:P_ROLE_NAME), ''^[A-Za-z][A-Za-z0-9 _-]*$'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid role name. Use English letters, numbers, spaces, hyphens or underscores.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role priority',
+    '    IF :P_ROLE_PRIORITY IS NOT NULL AND :P_ROLE_PRIORITY < 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role priority cannot be negative. Please enter zero or a positive number.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'', ''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate role name',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE UPPER(TRIM(ROLE_NAME)) = UPPER(TRIM(:P_ROLE_NAME));',
+    '',
+    '    IF L_COUNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role name already exists. Please use a different role name.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Create role',
+    '    INSERT INTO DEMO_ROLE_MASTER (',
+    '        ROLE_NAME,',
+    '        ROLE_PRIORITY,',
+    '        IS_ACTIVE',
+    '    )',
+    '    VALUES (',
+    '        TRIM(:P_ROLE_NAME),',
+    '        :P_ROLE_PRIORITY,',
+    '        COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), ''Y'')',
+    '    );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Role created successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_ROLE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role name already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_ROLE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to create role due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028062916Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071129Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8707462926605511482)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028062917Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028062917Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8707462012288511479)
+,p_param_name=>'P_ROLE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028062917Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028062917Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8707462411206511481)
+,p_param_name=>'P_ROLE_PRIORITY'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028062917Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028064307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8749333968611390834)
+,p_tool_name=>'create_role_page_access'
+,p_static_id=>'create-role-page-access'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for creating role-page access assignments in DEMO_ROLE_PAGE_ACCESS_MASTER.',
+'',
+'### Required workflow',
+'',
+'1. When the user requests a new role-page access assignment, collect ROLE_ID and PAGE_ID using the available role and page LOVs.',
+'',
+'2. For ROLE_ID, use this LOV:',
+'   SELECT ROLE_NAME AS D, ROLE_ID AS R',
+'   FROM DEMO_ROLE_MASTER',
+'   WHERE IS_ACTIVE = ''Y''',
+'   ORDER BY ROLE_PRIORITY, ROLE_NAME',
+'',
+'   Display ROLE_NAME to the user and use the selected ROLE_ID as the return value.',
+'',
+'3. For PAGE_ID, use this LOV:',
+'   SELECT PAGE_NAME || '' (APEX Page: '' || APEX_PAGE_ID || '')'' AS D,',
+'          PAGE_ID AS R',
+'   FROM DEMO_PAGE_MASTER',
+'   WHERE IS_ACTIVE = ''Y''',
+'   ORDER BY PAGE_NAME',
+'',
+'   Display PAGE_NAME with its APEX page ID and use the selected PAGE_ID as the return value. Never use APEX_PAGE_ID as PAGE_ID.',
+'',
+'4. If the user has not selected a role, display the available active roles and ask them to select one.',
+'',
+'5. If the user has not selected a page, display the available active registered pages and ask them to select one.',
+'',
+'6. Do not invent role IDs, page IDs, role names, or page names. Use only database results.',
+'',
+'7. IS_ACTIVE is optional. If the user does not specify it, use Y. Accept only Y or N.',
+'',
+'8. Before creating the assignment, call GET_ROLE_PAGE_ACCESS to check whether the selected ROLE_ID and PAGE_ID combination already exists. If it exists, do not create a duplicate. Inform the user and offer to activate the existing assignment if appro'
+||'priate.',
+'',
+'9. Do not execute CREATE_ROLE_PAGE_ACCESS until the role and page selections are valid.',
+'',
+'10. ROLE_PAGE_ACCESS_ID is generated automatically. CREATED_AT, CREATED_BY, UPDATED_AT, and UPDATED_BY are maintained by database triggers. Never request these fields from the user.',
+'',
+'11. Execute the create tool only once for each request.',
+'',
+'12. Report success only after the database confirms the insertion. If the insert fails, report the actual database error.',
+'',
+'13. This tool is only for creating new assignments. Do not use it to update or delete assignments.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DECLARE',
+    '    L_CNT NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT CREATE_ROLE_ACCESS_SP;',
+    '',
+    '    -- Validate required fields',
+    '    IF :P_ROLE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please select a role before creating page access.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    IF :P_PAGE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please select a page before creating role-page access.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE ROLE_ID = :P_ROLE_ID',
+    '      AND IS_ACTIVE = ''Y'';',
+    '',
+    '    IF L_CNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Selected role does not exist or is inactive. Please select an available role.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate page',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_PAGE_MASTER',
+    '    WHERE PAGE_ID = :P_PAGE_ID',
+    '      AND IS_ACTIVE = ''Y'';',
+    '',
+    '    IF L_CNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Selected page does not exist or is inactive. Please select an available page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate assignment',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_PAGE_ACCESS_MASTER',
+    '    WHERE ROLE_ID = :P_ROLE_ID',
+    '      AND PAGE_ID = :P_PAGE_ID;',
+    '',
+    '    IF L_CNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role already has an access assignment for the selected page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Create role-page access',
+    '    INSERT INTO DEMO_ROLE_PAGE_ACCESS_MASTER (',
+    '        ROLE_ID,',
+    '        PAGE_ID,',
+    '        IS_ACTIVE',
+    '    )',
+    '    VALUES (',
+    '        :P_ROLE_ID,',
+    '        :P_PAGE_ID,',
+    '        COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), ''Y'')',
+    '    );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Role-page access has been created successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_ROLE_ACCESS_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role-page access assignment already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_ROLE_ACCESS_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to create role-page access due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030070533Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8749335333018390844)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8749334878409390842)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8749334376073390840)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085550Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8296010948024590326)
+,p_tool_name=>'create_user'
+,p_static_id=>'create-user'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'### Create User and Role Selection Workflow',
+'',
+'When a user requests to create a new user:',
+'',
+'1. First, call GET_AVAILABLE_ROLES to retrieve the current list of active roles.',
+'2. Display the available roles clearly using their ROLE_NAME. Include ROLE_ID if helpful for distinguishing roles.',
+'3. Ask the user to select one role from the returned list.',
+'4. Accept a selection by role name or role ID, but verify that it matches one of the roles returned by GET_AVAILABLE_ROLES.',
+'5. Collect all required user details: FIRST_NAME, MIDDLE_NAME, LAST_NAME, EMAIL, MOBILE, PASSWORD, and ROLE_ID.',
+'6. If any required detail is missing, ask only for the missing information. Do not call CREATE_USER until all required details are available and validated.',
+'7. Treat passwords as sensitive. Never display, repeat, or log a password in the conversation. Prefer a secure password setup workflow rather than asking users to send passwords in ordinary chat.',
+'8. Once all required details are available, call CREATE_USER exactly once with the selected ROLE_ID and the collected user details.',
+'9. The creation tool must validate that the selected role is still active before inserting the user.',
+'10. Report success only after the tool confirms that the operation succeeded. If no active roles are returned, explain that no roles are currently available and do not create the user.',
+'',
+'Never invent role names or IDs. Use only the results returned by GET_AVAILABLE_ROLES.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DECLARE',
+    '    L_USER_ID  DEMO_USER_MASTER.USER_ID%TYPE;',
+    '    L_CNT      NUMBER;',
+    'BEGIN',
+    '    -- Required fields',
+    '    IF TRIM(:P_FIRST_NAME) IS NULL',
+    '       OR TRIM(:P_LAST_NAME) IS NULL',
+    '       OR TRIM(:P_EMAIL) IS NULL',
+    '       OR :P_PASSWORD IS NULL',
+    '       OR :P_ROLE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please provide all required fields: First Name, Last Name, Email, Password and Role.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate names',
+    '    IF NOT REGEXP_LIKE(TRIM(:P_FIRST_NAME), ''^[A-Za-z ]+$'')',
+    '       OR NOT REGEXP_LIKE(TRIM(:P_LAST_NAME), ''^[A-Za-z ]+$'')',
+    '       OR (:P_MIDDLE_NAME IS NOT NULL AND',
+    '           NOT REGEXP_LIKE(TRIM(:P_MIDDLE_NAME), ''^[A-Za-z ]+$'')) THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Names must contain only English letters and spaces.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate email',
+    '    IF NOT REGEXP_LIKE(TRIM(:P_EMAIL),',
+    '       ''^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please enter a valid email address.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate mobile',
+    '    IF :P_MOBILE IS NOT NULL AND',
+    '       NOT REGEXP_LIKE(TRIM(:P_MOBILE), ''^[0-9]{10,15}$'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Mobile number must contain 10 to 15 digits.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate password',
+    '    IF LENGTH(:P_PASSWORD) < 8 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Password must contain at least 8 characters.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate email',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_USER_MASTER',
+    '    WHERE UPPER(TRIM(EMAIL)) = UPPER(TRIM(:P_EMAIL));',
+    '',
+    '    IF L_CNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This email address is already registered. Please use a different email address.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE ROLE_ID = :P_ROLE_ID',
+    '      AND IS_ACTIVE = ''Y'';',
+    '',
+    '    IF L_CNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Selected role is invalid or inactive. Please select an available role.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    SAVEPOINT CREATE_USER_SP;',
+    '',
+    '    -- Create user',
+    '    INSERT INTO DEMO_USER_MASTER (',
+    '        FIRST_NAME, MIDDLE_NAME, LAST_NAME,',
+    '        EMAIL, MOBILE, IS_ACTIVE, PASSWORD',
+    '    )',
+    '    VALUES (',
+    '        TRIM(:P_FIRST_NAME),',
+    '        TRIM(:P_MIDDLE_NAME),',
+    '        TRIM(:P_LAST_NAME),',
+    '        UPPER(TRIM(:P_EMAIL)),',
+    '        TRIM(:P_MOBILE),',
+    '        ''Y'',',
+    '        :P_PASSWORD',
+    '    )',
+    '    RETURNING USER_ID INTO L_USER_ID;',
+    '',
+    '    -- Assign role',
+    '    INSERT INTO DEMO_USER_ROLE_ACCESS_MASTER (',
+    '        USER_ID, ROLE_ID, IS_ACTIVE',
+    '    )',
+    '    VALUES (L_USER_ID, :P_ROLE_ID, ''Y'');',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: User created successfully and role assigned.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO CREATE_USER_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This email or user-role assignment already exists. Please check the details.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO CREATE_USER_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to create user due to a database error. Please contact your application administrator.''',
+    '        );',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030063717Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296012751532590333)
+,p_param_name=>'P_EMAIL'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296011216418590330)
+,p_param_name=>'P_FIRST_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027055307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296013782853590334)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_allowed_values=>'["Y","N"]'
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027055307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296012242022590332)
+,p_param_name=>'P_LAST_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027055307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296011742817590331)
+,p_param_name=>'P_MIDDLE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027055307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8296013270136590334)
+,p_param_name=>'P_MOBILE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027054225Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027055307Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8339705391331278146)
+,p_param_name=>'P_PASSWORD'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027073703Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027073703Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8407857523513696941)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027113331Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027113331Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8780846597039747351)
+,p_tool_name=>'delete_navigation_menu_master'
+,p_static_id=>'delete-navigation-menu-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Delete a navigation menu record from DEMO_NAVIGATION_MENU_MASTER.',
+'',
+'1. Identify the target using MENU_ID. If the user provides a menu name, use GET_NAVIGATION_MENU_MASTER to find the corresponding record.',
+'2. If multiple menus match, ask the user to select the correct MENU_ID.',
+'3. Before deletion, display MENU_ID, MENU_NAME, PARENT_MENU_ID, PAGE_ID, and IS_ACTIVE.',
+'4. Check whether the menu has child menus. Explain that deleting a parent menu may also delete its descendants if the self-referencing foreign key uses ON DELETE CASCADE.',
+'5. Ask for explicit confirmation in a separate message before calling the delete tool. The initial deletion request is not confirmation.',
+'6. If the user declines or cancels, do not execute the deletion.',
+'7. Delete only the confirmed MENU_ID. Never delete records based on an ambiguous name.',
+'8. Do not delete the associated page from DEMO_PAGE_MASTER.',
+'9. Report success only after the database confirms deletion. If the menu does not exist or a database constraint prevents deletion, report the actual result.',
+'10. This tool only deletes records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DELETE FROM DEMO_NAVIGATION_MENU_MASTER',
+    'WHERE MENU_ID = :P_MENU_ID;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028095515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780846851396747357)
+,p_param_name=>'P_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028095515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8692029103594124619)
+,p_tool_name=>'delete_page_master'
+,p_static_id=>'delete-page-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for deleting page records from the DEMO_PAGE_MASTER table.',
+'',
+'Required identification field:',
+'- PAGE_ID',
+'',
+'Instructions:',
+'1. When the user requests deletion, first use GET_PAGE_MASTER to retrieve the target page.',
+'2. If the user provides a page name or APEX_PAGE_ID instead of PAGE_ID, search for the matching record.',
+'3. If multiple records match, ask the user to identify the correct record.',
+'4. Before deletion, display the PAGE_ID, APEX_PAGE_ID, and PAGE_NAME of the target page.',
+'5. Explain that deleting a page may also delete related role-page access or role home-page records if configured foreign keys use ON DELETE CASCADE.',
+'6. Ask for explicit confirmation before executing the deletion tool.',
+'7. Do not interpret the original deletion request itself as confirmation. Wait for a separate affirmative response.',
+'8. Delete only the specific record identified by PAGE_ID. Never delete multiple records unless the user explicitly requests this and the operation is separately reviewed and confirmed.',
+'9. If the user cancels or declines, do not execute the deletion tool.',
+'10. Report success only if the database confirms the deletion. If no record matches PAGE_ID, inform the user that the page was not found.',
+'11. Never use this tool to create or update records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DELETE FROM DEMO_PAGE_MASTER',
+    'WHERE PAGE_ID = :P_PAGE_ID;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028052448Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028060533Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8692029494188124623)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028052448Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028060533Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9635638369058488928)
+,p_tool_name=>'delete_role_home_page'
+,p_static_id=>'delete-role-home-page'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Use this tool only when an authorized user explicitly requests deletion of a role home page assignment. First retrieve the record and display its role name and page name. Explain that the role will lose its configured default home page. Ask for expli'
+||'cit confirmation before executing. Never delete the role or the registered page itself. Report success only when confirmed by the tool.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_ROLE VARCHAR2(4000);',
+    '    L_PAGE VARCHAR2(4000);',
+    'BEGIN',
+    '    SAVEPOINT DELETE_HOME_SP;',
+    '',
+    '    IF :P_ROLE_HOME_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Role home page ID is required.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    BEGIN',
+    '        SELECT R.ROLE_NAME,P.PAGE_NAME',
+    '        INTO L_ROLE,L_PAGE',
+    '        FROM DEMO_ROLE_HOME_PAGES H',
+    '        JOIN DEMO_ROLE_MASTER R',
+    '          ON R.ROLE_ID=H.ROLE_ID',
+    '        JOIN DEMO_PAGE_MASTER P',
+    '          ON P.PAGE_ID=H.HOME_PAGE_ID',
+    '        WHERE H.ROLE_HOME_ID=:P_ROLE_HOME_ID;',
+    '    EXCEPTION',
+    '        WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result=>''Role home page record not found.''',
+    '            );',
+    '            RETURN;',
+    '    END;',
+    '',
+    '    DELETE FROM DEMO_ROLE_HOME_PAGES',
+    '    WHERE ROLE_HOME_ID=:P_ROLE_HOME_ID;',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result=>''SUCCESS: Home page assignment deleted for role ''',
+    '                  ||L_ROLE||'' (Page: ''||L_PAGE||'').''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO DELETE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result=>''Unable to delete role home page.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031063851Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063851Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635638627137488939)
+,p_param_name=>'P_ROLE_HOME_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031063851Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063851Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8711573333369571819)
+,p_tool_name=>'delete_role_master'
+,p_static_id=>'delete-role-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for deleting roles from DEMO_ROLE_MASTER.',
+'',
+'1. Identify the target role using ROLE_ID.',
+'2. If the user supplies a role name, retrieve matching roles first. If multiple records match, ask the user to identify the correct ROLE_ID.',
+'3. Display ROLE_ID, ROLE_NAME, ROLE_PRIORITY, and IS_ACTIVE before deletion.',
+'4. Check whether the role is assigned to users or referenced by role-page access and role home-page records.',
+'5. Explain that deleting a role may affect associated records if foreign keys use ON DELETE CASCADE.',
+'6. Ask for explicit confirmation in a separate message before executing the deletion tool. The initial deletion request is not confirmation.',
+'7. If the user cancels or declines, do not delete anything.',
+'8. Delete only the selected ROLE_ID.',
+'9. Report success only after the database confirms the deletion.',
+'10. If deletion fails because of a foreign-key constraint or another database error, report the actual error and do not claim success.',
+'11. Never use this tool to create or update roles.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DELETE FROM DEMO_ROLE_MASTER',
+    'WHERE ROLE_ID = :P_ROLE_ID;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028063920Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063920Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8711573755212571827)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028063920Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063920Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8764191429239149992)
+,p_tool_name=>'delete_role_page_access'
+,p_static_id=>'delete-role-page-access'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for deleting role-page access assignments from DEMO_ROLE_PAGE_ACCESS_MASTER.',
+'',
+'1. When the user requests deletion, first call GET_ROLE_PAGE_ACCESS to retrieve the existing assignment.',
+'2. Identify the assignment using ROLE_PAGE_ACCESS_ID.',
+'3. If the user provides a role name or page name instead of ROLE_PAGE_ACCESS_ID, search the existing assignments and identify the matching record.',
+'4. If multiple assignments match, display the results and ask the user to select the correct assignment.',
+'5. Before deletion, display ROLE_PAGE_ACCESS_ID, ROLE_NAME, PAGE_NAME, APEX_PAGE_ID, and IS_ACTIVE.',
+'6. Ask the user for explicit confirmation in a separate message before calling DELETE_ROLE_PAGE_ACCESS. The initial deletion request is not confirmation.',
+'7. If the user cancels or declines, do not execute the deletion tool.',
+'8. After confirmation, pass the selected ROLE_PAGE_ACCESS_ID as a NUMBER parameter.',
+'9. Delete only the specifically identified and confirmed assignment.',
+'10. Report success only after the database confirms that the record was deleted.',
+'11. If the assignment does not exist or the database operation fails, report the actual result. Never claim success when deletion fails.',
+'12. This tool is only for deleting assignments. Never use it to create or update records.',
+'13. Do not delete the role from DEMO_ROLE_MASTER or the page from DEMO_PAGE_MASTER. Only delete the selected assignment record.',
+'14. Only authorized administrators may perform this operation.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DELETE FROM DEMO_ROLE_PAGE_ACCESS_MASTER',
+    'WHERE ROLE_PAGE_ACCESS_ID = :P_ROLE_PAGE_ACCESS_ID;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028091935Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028091935Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8764191700844149997)
+,p_param_name=>'P_ROLE_PAGE_ACCESS_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028091935Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028091935Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8365654985865438914)
+,p_tool_name=>'delete_user'
+,p_static_id=>'delete-user'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'### Delete User Workflow',
+'',
+'When a user requests account deletion:',
+'',
+'1. Identify the target user using USER_ID or email and retrieve their details using GET_USER_DETAILS.',
+'2. If the user cannot be identified uniquely, ask for clarification.',
+'3. Display the user''s ID, name, and email, and ask for explicit confirmation before deleting.',
+'4. Do not call DELETE_USER until the user confirms the deletion.',
+'5. Pass only the confirmed user''s USER_ID to DELETE_USER.',
+'6. Delete only one user per operation.',
+'7. If the user cancels, do not delete anything.',
+'8. Report success only after the database tool confirms deletion. If the user does not exist or the operation fails, explain the issue politely.',
+'9. Inform the user that associated role assignments may also be deleted because of database cascade rules.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'BEGIN',
+    '    DELETE FROM DEMO_USER_MASTER',
+    '    WHERE USER_ID = :P_USER_ID;',
+    '',
+    '    IF SQL%ROWCOUNT = 0 THEN',
+    '        RAISE_APPLICATION_ERROR(',
+    '            -20001,',
+    '            ''No user found with the provided USER_ID.''',
+    '        );',
+    '    END IF;',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261027090744Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027090744Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8365655250152438918)
+,p_param_name=>'P_USER_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027090744Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027090744Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8694931061144243684)
+,p_tool_name=>'get_available_apex_pages'
+,p_static_id=>'get-available-apex-pages'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'SELECT',
+    '    PAGE_ID,',
+    '    PAGE_NAME',
+    'FROM APEX_APPLICATION_PAGES',
+    'WHERE APPLICATION_ID = :APP_ID',
+    '  AND PAGE_MODE = ''Normal''',
+    'ORDER BY PAGE_ID;')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028054439Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028054439Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8407917485583701402)
+,p_tool_name=>'get_available_roles'
+,p_static_id=>'get-available-roles'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Retrieves all available active roles from DEMO_ROLE_MASTER. Use this tool when creating a new user or when the user asks to see the available roles. Display the role ID and role name to the user, and ask them to select one role before creating the us'
+||'er. Only active roles should be offered.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'SELECT',
+    '    ROLE_ID,',
+    '    ROLE_NAME,',
+    '    ROLE_PRIORITY',
+    'FROM DEMO_ROLE_MASTER',
+    'WHERE IS_ACTIVE = ''Y''',
+    'ORDER BY ROLE_PRIORITY NULLS LAST, ROLE_NAME;')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261027113416Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027113416Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8779135437240304029)
+,p_tool_name=>'get_navigation_menu_master'
+,p_static_id=>'get-navigation-menu-master'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Retrieve and search navigation menu records from DEMO_NAVIGATION_MENU_MASTER.',
+'',
+'1. Use this tool whenever the user asks to view, list, search, or verify navigation menus.',
+'2. Support filtering by MENU_ID, PARENT_MENU_ID, PAGE_ID, MENU_NAME, and IS_ACTIVE.',
+'3. Display menu ID, sequence, menu name, description, parent menu name, registered page name, APEX page ID, icon, icon class, active status, and audit fields.',
+'4. Use actual database results. Never invent menu IDs, page names, parent names, or other values.',
+'5. If no filters are provided, return the records retrieved by the query.',
+'6. Present the results in a readable table. If no records match, say so.',
+'7. This tool is read-only. Never create, update, or delete records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'SELECT',
+    '    M.MENU_ID,',
+    '    M.MENU_SEQ_ID,',
+    '    M.MENU_NAME,',
+    '    M.MENU_DESCRIPTION,',
+    '    M.PARENT_MENU_ID,',
+    '    PM.MENU_NAME AS PARENT_MENU_NAME,',
+    '    M.PAGE_ID,',
+    '    P.PAGE_NAME,',
+    '    P.APEX_PAGE_ID AS REGISTERED_APEX_PAGE_ID,',
+    '    M.APEX_PAGE_ID,',
+    '    M.ICON,',
+    '    M.ICON_CLASS,',
+    '    M.IS_ACTIVE,',
+    '    M.CREATED_AT,',
+    '    M.CREATED_BY,',
+    '    M.UPDATED_AT,',
+    '    M.UPDATED_BY',
+    'FROM DEMO_NAVIGATION_MENU_MASTER M',
+    'LEFT JOIN DEMO_NAVIGATION_MENU_MASTER PM',
+    '    ON PM.MENU_ID = M.PARENT_MENU_ID',
+    'LEFT JOIN DEMO_PAGE_MASTER P',
+    '    ON P.PAGE_ID = M.PAGE_ID',
+    'WHERE (:P_MENU_ID IS NULL OR M.MENU_ID = :P_MENU_ID)',
+    '  AND (:P_PARENT_MENU_ID IS NULL',
+    '       OR M.PARENT_MENU_ID = :P_PARENT_MENU_ID)',
+    '  AND (:P_PAGE_ID IS NULL OR M.PAGE_ID = :P_PAGE_ID)',
+    '  AND (:P_IS_ACTIVE IS NULL',
+    '       OR M.IS_ACTIVE = UPPER(TRIM(:P_IS_ACTIVE)))',
+    '  AND (',
+    '      :P_MENU_NAME IS NULL',
+    '      OR UPPER(M.MENU_NAME) LIKE',
+    '         ''%'' || UPPER(TRIM(:P_MENU_NAME)) || ''%''',
+    '  )',
+    'ORDER BY M.MENU_SEQ_ID, M.MENU_NAME;')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8779137294658304039)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8779135796870304033)
+,p_param_name=>'P_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8779137774373304041)
+,p_param_name=>'P_MENU_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8779136769005304037)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8779136271247304035)
+,p_param_name=>'P_PARENT_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028094515Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8689857447616642682)
+,p_tool_name=>'get_page_master'
+,p_static_id=>'get-page-master'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for retrieving and searching page records from the DEMO_PAGE_MASTER table.',
+'',
+'Instructions:',
+'1. Use this tool whenever the user asks to view, list, search, or check page details.',
+'2. You can search using PAGE_ID, APEX_PAGE_ID, PAGE_NAME, or IS_ACTIVE.',
+'3. If the user does not provide any filters, retrieve all available page records returned by the SQL query.',
+'4. Display the following fields in the response:',
+'   - PAGE_ID',
+'   - APEX_PAGE_ID',
+'   - PAGE_NAME',
+'   - IS_ACTIVE',
+'   - CREATED_AT',
+'   - CREATED_BY',
+'   - UPDATED_AT',
+'   - UPDATED_BY',
+'5. Present the results in a clear, readable table.',
+'6. If no records match the supplied filters, inform the user that no matching page records were found.',
+'7. Never invent page IDs, page names, or audit information. Use only the database results.',
+'8. This tool is read-only. Never use it to create, update, or delete records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'SELECT',
+    '    PAGE_ID,',
+    '    APEX_PAGE_ID,',
+    '    PAGE_NAME,',
+    '    IS_ACTIVE,',
+    '    CREATED_AT,',
+    '    CREATED_BY,',
+    '    UPDATED_AT,',
+    '    UPDATED_BY',
+    'FROM DEMO_PAGE_MASTER',
+    'WHERE (:P_PAGE_ID IS NULL OR PAGE_ID = :P_PAGE_ID)',
+    '  AND (:P_APEX_PAGE_ID IS NULL OR APEX_PAGE_ID = :P_APEX_PAGE_ID)',
+    '  AND (',
+    '        :P_PAGE_NAME IS NULL',
+    '        OR UPPER(PAGE_NAME) LIKE ''%'' || UPPER(TRIM(:P_PAGE_NAME)) || ''%''',
+    '      )',
+    '  AND (:P_IS_ACTIVE IS NULL OR IS_ACTIVE = UPPER(TRIM(:P_IS_ACTIVE)))',
+    'ORDER BY PAGE_ID;')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028055614Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8689858219229642692)
+,p_param_name=>'P_APEX_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8689859274738642694)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028055614Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8689857717102642689)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8689858735039642693)
+,p_param_name=>'P_PAGE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028050822Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9632055598700006217)
+,p_tool_name=>'get_role_home_page'
+,p_static_id=>'get-role-home-page'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Use this tool to retrieve role home page assignments. If no filters are provided, return all records. Display role name, home page name, actual APEX page number, status, and assignment ID. This tool is read-only. Never modify data or invent records.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'SELECT',
+    '    H.ROLE_HOME_ID,',
+    '    H.ROLE_ID,',
+    '    R.ROLE_NAME,',
+    '    H.HOME_PAGE_ID,',
+    '    P.PAGE_NAME,',
+    '    P.APEX_PAGE_ID,',
+    '    H.IS_ACTIVE,',
+    '    H.CREATED_AT,',
+    '    H.CREATED_BY,',
+    '    H.UPDATED_AT,',
+    '    H.UPDATED_BY',
+    'FROM DEMO_ROLE_HOME_PAGES H',
+    'JOIN DEMO_ROLE_MASTER R',
+    '    ON R.ROLE_ID = H.ROLE_ID',
+    'JOIN DEMO_PAGE_MASTER P',
+    '    ON P.PAGE_ID = H.HOME_PAGE_ID',
+    'WHERE (:P_ROLE_HOME_ID IS NULL',
+    '       OR H.ROLE_HOME_ID = :P_ROLE_HOME_ID)',
+    '  AND (:P_ROLE_ID IS NULL',
+    '       OR H.ROLE_ID = :P_ROLE_ID)',
+    '  AND (:P_IS_ACTIVE IS NULL',
+    '       OR H.IS_ACTIVE = UPPER(TRIM(:P_IS_ACTIVE)))',
+    'ORDER BY R.ROLE_NAME',
+    '')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9632056868965006237)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9632055892663006230)
+,p_param_name=>'P_ROLE_HOME_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9632056333454006234)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031062217Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8753358346655443936)
+,p_tool_name=>'get_role_page_access'
+,p_static_id=>'get-role-page-access'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for retrieving role-page access assignment data from DEMO_ROLE_PAGE_ACCESS_MASTER.',
+'',
+'1. Use this tool when the user asks to view, list, search, or verify role-page access assignments.',
+'2. Support filtering by ROLE_PAGE_ACCESS_ID, ROLE_ID, PAGE_ID, and IS_ACTIVE.',
+'3. Use the joined ROLE_NAME and PAGE_NAME to display readable results instead of showing only numeric IDs.',
+'4. Display ROLE_PAGE_ACCESS_ID, ROLE_NAME, PAGE_NAME, APEX_PAGE_ID, IS_ACTIVE, CREATED_AT, CREATED_BY, UPDATED_AT, and UPDATED_BY.',
+'5. If the user provides a role name, use the available role lookup data to identify the corresponding ROLE_ID before filtering.',
+'6. If the user provides a page name, use the available page lookup data to identify the corresponding PAGE_ID before filtering.',
+'7. If the user does not specify any filters, return all assignments returned by the SQL query.',
+'8. Present the results in a clear table.',
+'9. If no records match, inform the user that no matching role-page access assignments were found.',
+'10. Never invent assignment IDs, role names, page names, or database values.',
+'11. This tool is read-only. Never use it to create, update, or delete assignments.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'SELECT',
+    '    A.ROLE_PAGE_ACCESS_ID,',
+    '    A.ROLE_ID,',
+    '    R.ROLE_NAME,',
+    '    A.PAGE_ID,',
+    '    P.PAGE_NAME,',
+    '    P.APEX_PAGE_ID,',
+    '    A.IS_ACTIVE,',
+    '    A.CREATED_AT,',
+    '    A.CREATED_BY,',
+    '    A.UPDATED_AT,',
+    '    A.UPDATED_BY',
+    'FROM DEMO_ROLE_PAGE_ACCESS_MASTER A',
+    'JOIN DEMO_ROLE_MASTER R',
+    '    ON R.ROLE_ID = A.ROLE_ID',
+    'JOIN DEMO_PAGE_MASTER P',
+    '    ON P.PAGE_ID = A.PAGE_ID',
+    'WHERE (:P_ROLE_PAGE_ACCESS_ID IS NULL',
+    '       OR A.ROLE_PAGE_ACCESS_ID = :P_ROLE_PAGE_ACCESS_ID)',
+    '  AND (:P_ROLE_ID IS NULL',
+    '       OR A.ROLE_ID = :P_ROLE_ID)',
+    '  AND (:P_PAGE_ID IS NULL',
+    '       OR A.PAGE_ID = :P_PAGE_ID)',
+    '  AND (:P_IS_ACTIVE IS NULL',
+    '       OR A.IS_ACTIVE = UPPER(TRIM(:P_IS_ACTIVE)))',
+    'ORDER BY R.ROLE_NAME, P.PAGE_NAME;')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8753360168027443946)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8753359676791443944)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8753359106055443942)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8753358664187443940)
+,p_param_name=>'P_ROLE_PAGE_ACCESS_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028090441Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8291061766385997315)
+,p_tool_name=>'get_user_details'
+,p_static_id=>'get-user-details'
+,p_tool_type=>'NATIVE_RETRIEVE_DATA'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Retrieve user profiles from DEMO_USER_MASTER using an optional user ID, email address, or account status. Never retrieve or display passwords or password hashes.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'sql_query', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'SELECT',
+    '    USER_ID,',
+    '    FIRST_NAME,',
+    '    MIDDLE_NAME,',
+    '    LAST_NAME,',
+    '    EMAIL,',
+    '    MOBILE,',
+    '    IS_ACTIVE,',
+    '    LAST_LOGIN,',
+    '    CREATED_AT,',
+    '    CREATED_BY,',
+    '    UPDATED_AT,',
+    '    UPDATED_BY',
+    'FROM DEMO_USER_MASTER',
+    'WHERE (:P_USER_ID IS NULL OR USER_ID = :P_USER_ID)',
+    '  AND (',
+    '        :P_EMAIL IS NULL',
+    '        OR UPPER(TRIM(EMAIL)) = UPPER(TRIM(:P_EMAIL))',
+    '      )',
+    '  AND (',
+    '        :P_IS_ACTIVE IS NULL',
+    '        OR IS_ACTIVE = :P_IS_ACTIVE',
+    '      )',
+    'ORDER BY USER_ID',
+    'FETCH FIRST 100 ROWS ONLY')),
+  'type', 'SQL_QUERY')).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027052805Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8291062642143997320)
+,p_param_name=>'P_EMAIL'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8291063185739997321)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8291062156324997319)
+,p_param_name=>'P_USER_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027050728Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8780959781965357755)
+,p_tool_name=>'update_navigation_menu_master'
+,p_static_id=>'update-navigation-menu-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Update an existing record in DEMO_NAVIGATION_MENU_MASTER.',
+'',
+'1. Identify the target menu using MENU_ID. If the user provides only a menu name, call GET_NAVIGATION_MENU_MASTER to find the matching record.',
+'2. If multiple menus match, show the results and ask the user to select the correct MENU_ID.',
+'3. Retrieve the existing menu details before updating.',
+'4. Update only the fields the user explicitly wants to change. Preserve all other values.',
+'5. When changing PARENT_MENU_ID, retrieve the existing menu list and validate the selected parent. Do not allow a menu to be its own parent or create a circular parent-child hierarchy.',
+'6. When changing PAGE_ID, show the active registered pages from DEMO_PAGE_MASTER. Use the selected PAGE_ID return value, not APEX_PAGE_ID.',
+'7. If the user changes PAGE_ID, synchronize APEX_PAGE_ID with the selected page''s registered APEX_PAGE_ID.',
+'8. Validate IS_ACTIVE as Y or N and ensure numeric fields contain valid numbers.',
+'9. Do not modify MENU_ID or audit fields directly.',
+'10. Do not execute the tool until the target and requested changes are clear.',
+'11. Report success only after confirming that a row was updated. If no row matches, report that the menu was not found.',
+'12. This tool only updates records. It must not create or delete records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_SEQ NUMBER;',
+    '    L_PAR NUMBER;',
+    '    L_PAGE NUMBER;',
+    '    L_CNT NUMBER;',
+    '    L_NAME VARCHAR2(4000);',
+    '    L_APEX NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT UPD_MENU;',
+    '',
+    '    IF :P_MENU_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Menu ID required.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    L_SEQ:=TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_MENU_SEQ_ID)),''''));',
+    '    L_PAR:=TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_PARENT_MENU_ID)),''''));',
+    '    L_PAGE:=TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_PAGE_ID)),''''));',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_NAVIGATION_MENU_MASTER',
+    '    WHERE MENU_ID=TO_NUMBER(:P_MENU_ID);',
+    '',
+    '    IF L_CNT=0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Menu not found.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    IF L_SEQ IS NOT NULL THEN',
+    '        IF L_SEQ<=0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Sequence must be positive.'');',
+    '            RETURN;',
+    '        END IF;',
+    '        SELECT COUNT(*) INTO L_CNT',
+    '        FROM DEMO_NAVIGATION_MENU_MASTER',
+    '        WHERE MENU_SEQ_ID=L_SEQ AND MENU_ID<>TO_NUMBER(:P_MENU_ID);',
+    '        IF L_CNT>0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Menu sequence already exists.'');',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    IF L_PAGE IS NOT NULL THEN',
+    '        BEGIN',
+    '            SELECT PAGE_NAME,APEX_PAGE_ID INTO L_NAME,L_APEX',
+    '            FROM DEMO_PAGE_MASTER',
+    '            WHERE PAGE_ID=L_PAGE AND IS_ACTIVE=''Y'';',
+    '        EXCEPTION WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Page not found or inactive.'');',
+    '            RETURN;',
+    '        END;',
+    '    END IF;',
+    '',
+    '    IF L_PAR IS NOT NULL THEN',
+    '        IF L_PAR<=0 OR L_PAR=TO_NUMBER(:P_MENU_ID) THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Invalid parent menu.'');',
+    '            RETURN;',
+    '        END IF;',
+    '        SELECT COUNT(*) INTO L_CNT',
+    '        FROM DEMO_NAVIGATION_MENU_MASTER',
+    '        WHERE MENU_ID=L_PAR AND IS_ACTIVE=''Y'';',
+    '        IF L_CNT=0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Parent menu not found or inactive.'');',
+    '            RETURN;',
+    '        END IF;',
+    '        SELECT COUNT(*) INTO L_CNT',
+    '        FROM (',
+    '            SELECT MENU_ID FROM DEMO_NAVIGATION_MENU_MASTER',
+    '            START WITH MENU_ID=TO_NUMBER(:P_MENU_ID)',
+    '            CONNECT BY NOCYCLE PRIOR MENU_ID=PARENT_MENU_ID',
+    '        ) WHERE MENU_ID=L_PAR;',
+    '        IF L_CNT>0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Circular menu hierarchy not allowed.'');',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    IF :P_IS_ACTIVE IS NOT NULL AND',
+    '       UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Status must be Y or N.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    UPDATE DEMO_NAVIGATION_MENU_MASTER M',
+    '    SET MENU_SEQ_ID=COALESCE(L_SEQ,M.MENU_SEQ_ID),',
+    '        MENU_NAME=CASE WHEN L_PAGE IS NOT NULL THEN L_NAME ELSE COALESCE(TRIM(:P_MENU_NAME),M.MENU_NAME) END,',
+    '        MENU_DESCRIPTION=COALESCE(TRIM(:P_MENU_DESCRIPTION),M.MENU_DESCRIPTION),',
+    '        PARENT_MENU_ID=COALESCE(L_PAR,M.PARENT_MENU_ID),',
+    '        PAGE_ID=COALESCE(L_PAGE,M.PAGE_ID),',
+    '        APEX_PAGE_ID=COALESCE(L_APEX,M.APEX_PAGE_ID),',
+    '        ICON=COALESCE(TRIM(:P_ICON),M.ICON),',
+    '        ICON_CLASS=COALESCE(TRIM(:P_ICON_CLASS),M.ICON_CLASS),',
+    '        IS_ACTIVE=COALESCE(UPPER(TRIM(:P_IS_ACTIVE)),M.IS_ACTIVE)',
+    '    WHERE M.MENU_ID=TO_NUMBER(:P_MENU_ID);',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(p_result=>''SUCCESS: Navigation menu updated successfully.'');',
+    '',
+    'EXCEPTION',
+    '    WHEN VALUE_ERROR THEN',
+    '        ROLLBACK TO UPD_MENU;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Invalid numeric input. Check all ID and sequence values.'');',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPD_MENU;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Duplicate menu value.'');',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPD_MENU;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Unable to update navigation menu. Contact administrator.'');',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071751Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780963265026357772)
+,p_param_name=>'P_ICON'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780963791632357774)
+,p_param_name=>'P_ICON_CLASS'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780964280230357776)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780961756268357766)
+,p_param_name=>'P_MENU_DESCRIPTION'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780960273886357760)
+,p_param_name=>'P_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780961289236357764)
+,p_param_name=>'P_MENU_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780960790485357762)
+,p_param_name=>'P_MENU_SEQ_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780962795297357770)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8780962261889357768)
+,p_param_name=>'P_PARENT_MENU_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028095413Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8690463035824070005)
+,p_tool_name=>'update_page_master'
+,p_static_id=>'update-page-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for updating existing page records in the DEMO_PAGE_MASTER table.',
+'',
+'Required identification field:',
+'- PAGE_ID',
+'',
+'Updatable fields:',
+'- APEX_PAGE_ID',
+'- PAGE_NAME',
+'- IS_ACTIVE',
+'',
+'Instructions:',
+'1. When the user requests an update, identify the target page using PAGE_ID.',
+'2. If the user supplies only a page name or APEX_PAGE_ID, use GET_PAGE_MASTER to find the matching record.',
+'3. If multiple records match the user''s description, display the matching records and ask the user to identify the correct PAGE_ID.',
+'4. Retrieve the existing record before updating it.',
+'5. Update only the fields the user wants to change. Preserve all other existing values.',
+'6. Validate APEX_PAGE_ID as numeric, PAGE_NAME as non-empty when supplied, and IS_ACTIVE as Y or N.',
+'7. Do not allow changes to PAGE_ID, CREATED_AT, CREATED_BY, UPDATED_AT, or UPDATED_BY. These fields are generated or maintained by the database.',
+'8. Do not execute the tool if PAGE_ID is missing or the requested changes are ambiguous.',
+'9. Execute the update tool only after the target record and intended changes are clear.',
+'10. Report success only when the database confirms that a record was updated. If no record matches PAGE_ID, inform the user that the page was not found.',
+'11. If a duplicate APEX_PAGE_ID or another database constraint error occurs, report it accurately.',
+'12. Never use this tool to create or delete records.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_COUNT NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT UPDATE_PAGE_SP;',
+    '',
+    '    -- Validate PAGE_ID',
+    '    IF :P_PAGE_ID IS NULL OR :P_PAGE_ID <= 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Please provide a valid Page ID.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check whether page exists',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_PAGE_MASTER',
+    '    WHERE PAGE_ID = :P_PAGE_ID;',
+    '',
+    '    IF L_COUNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Page not found. Please provide a valid Page ID.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate APEX Page ID',
+    '    IF :P_APEX_PAGE_ID IS NOT NULL',
+    '       AND :P_APEX_PAGE_ID <= 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''APEX Page ID must be a positive number.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate page name',
+    '    IF :P_PAGE_NAME IS NOT NULL THEN',
+    '        IF TRIM(:P_PAGE_NAME) IS NULL',
+    '           OR NOT REGEXP_LIKE(',
+    '               TRIM(:P_PAGE_NAME),',
+    '               ''^[A-Za-z][A-Za-z0-9 _-]*$''',
+    '           ) THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Invalid page name. Use English letters, numbers, spaces, hyphens or underscores.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'', ''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate APEX Page ID',
+    '    IF :P_APEX_PAGE_ID IS NOT NULL THEN',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE APEX_PAGE_ID = :P_APEX_PAGE_ID',
+    '          AND PAGE_ID <> :P_PAGE_ID;',
+    '',
+    '        IF L_COUNT > 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''This APEX Page ID is already registered to another page.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate page name',
+    '    IF :P_PAGE_NAME IS NOT NULL THEN',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE UPPER(TRIM(PAGE_NAME)) = UPPER(TRIM(:P_PAGE_NAME))',
+    '          AND PAGE_ID <> :P_PAGE_ID;',
+    '',
+    '        IF L_COUNT > 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''This page name already exists. Please use a different name.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Update page',
+    '    UPDATE DEMO_PAGE_MASTER',
+    '    SET',
+    '        APEX_PAGE_ID = COALESCE(:P_APEX_PAGE_ID, APEX_PAGE_ID),',
+    '        PAGE_NAME = COALESCE(TRIM(:P_PAGE_NAME), PAGE_NAME),',
+    '        IS_ACTIVE = COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), IS_ACTIVE)',
+    '    WHERE PAGE_ID = :P_PAGE_ID;',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Page details updated successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPDATE_PAGE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''APEX Page ID or page name already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPDATE_PAGE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to update page due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071425Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690463855493070011)
+,p_param_name=>'P_APEX_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690464815240070013)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690463356267070009)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8690464300519070012)
+,p_param_name=>'P_PAGE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028051542Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9635565575211098367)
+,p_tool_name=>'update_role_home_page'
+,p_static_id=>'update-role-home-page'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>'Use this tool to update an existing role home page assignment. First retrieve the assignment using GET_ROLE_HOME_PAGE. Identify it by ROLE_HOME_ID. Collect only the fields the user wants to change. Select roles and pages from active LOVs. Automatical'
+||'ly synchronize PAGE_NAME when HOME_PAGE_ID changes. Never create duplicate role assignments. Preserve unspecified fields and report the tool result.'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_CNT  NUMBER;',
+    '    L_ROLE NUMBER;',
+    '    L_PAGE NUMBER;',
+    '    L_ID   NUMBER;',
+    '    L_NAME VARCHAR2(4000);',
+    'BEGIN',
+    '    SAVEPOINT UPDATE_HOME_SP;',
+    '',
+    '    -- Convert parameters',
+    '    L_ID := TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_ROLE_HOME_ID)), ''''));',
+    '    L_ROLE := TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_ROLE_ID)), ''''));',
+    '    L_PAGE := TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_HOME_PAGE_ID)), ''''));',
+    '',
+    '    IF L_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Role home page ID is required.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_HOME_PAGES',
+    '    WHERE ROLE_HOME_ID=L_ID;',
+    '',
+    '    IF L_CNT=0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Role home page record not found.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Status must be Y or N.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    SELECT COALESCE(L_ROLE,ROLE_ID),',
+    '           COALESCE(L_PAGE,HOME_PAGE_ID)',
+    '    INTO L_ROLE,L_PAGE',
+    '    FROM DEMO_ROLE_HOME_PAGES',
+    '    WHERE ROLE_HOME_ID=L_ID;',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE ROLE_ID=L_ROLE AND IS_ACTIVE=''Y'';',
+    '',
+    '    IF L_CNT=0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Selected role is invalid or inactive.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    BEGIN',
+    '        SELECT PAGE_NAME INTO L_NAME',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE PAGE_ID=L_PAGE AND IS_ACTIVE=''Y'';',
+    '    EXCEPTION',
+    '        WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result=>''Selected page is invalid or inactive.'');',
+    '            RETURN;',
+    '    END;',
+    '',
+    '    SELECT COUNT(*) INTO L_CNT',
+    '    FROM DEMO_ROLE_HOME_PAGES',
+    '    WHERE ROLE_ID=L_ROLE AND ROLE_HOME_ID<>L_ID;',
+    '',
+    '    IF L_CNT>0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''This role already has another home page.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    UPDATE DEMO_ROLE_HOME_PAGES',
+    '    SET ROLE_ID=L_ROLE,',
+    '        HOME_PAGE_ID=L_PAGE,',
+    '        PAGE_NAME=L_NAME,',
+    '        IS_ACTIVE=COALESCE(UPPER(TRIM(:P_IS_ACTIVE)),IS_ACTIVE)',
+    '    WHERE ROLE_HOME_ID=L_ID;',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result=>''SUCCESS: Role home page updated successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN VALUE_ERROR THEN',
+    '        ROLLBACK TO UPDATE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Invalid numeric ID. Please provide valid numeric values.'');',
+    '',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPDATE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''This role already has a home page.'');',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPDATE_HOME_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(p_result=>''Unable to update role home page. Contact administrator.'');',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635566880809098383)
+,p_param_name=>'P_HOME_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635567381496098387)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635565855556098377)
+,p_param_name=>'P_ROLE_HOME_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9635566384470098380)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031063739Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8711434022522564921)
+,p_tool_name=>'update_role_master'
+,p_static_id=>'update-role-master'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for updating roles in DEMO_ROLE_MASTER.',
+'',
+'1. Identify the target role using ROLE_ID.',
+'2. If the user provides only a role name, retrieve the matching role first. If multiple records match, ask the user to select the correct role.',
+'3. Retrieve and display the existing role details before making changes.',
+'4. Update only the fields the user wants to change.',
+'5. Validate ROLE_NAME as non-empty when supplied, ROLE_PRIORITY as numeric when supplied, and IS_ACTIVE as Y or N.',
+'6. Check for duplicate role names before changing ROLE_NAME, ignoring case and surrounding spaces.',
+'7. Do not modify ROLE_ID, CREATED_AT, CREATED_BY, UPDATED_AT, or UPDATED_BY directly.',
+'8. Do not execute if ROLE_ID is missing or no actual change has been specified.',
+'9. Report success only after confirming that a row was updated. If no row matches, inform the user that the role was not found.',
+'10. Never use this tool to create or delete roles.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_ROLE_PRIORITY NUMBER;',
+    '    L_COUNT          NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT UPDATE_ROLE_SP;',
+    '',
+    '    -- Validate Role ID',
+    '    IF :P_ROLE_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role ID is required.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Convert priority safely',
+    '    L_ROLE_PRIORITY := TO_NUMBER(',
+    '        NULLIF(TRIM(TO_CHAR(:P_ROLE_PRIORITY)), '''')',
+    '    );',
+    '',
+    '    -- Check whether role exists',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_ROLE_MASTER',
+    '    WHERE ROLE_ID = TO_NUMBER(:P_ROLE_ID);',
+    '',
+    '    IF L_COUNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role not found. Please provide a valid Role ID.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role name',
+    '    IF :P_ROLE_NAME IS NOT NULL THEN',
+    '        IF TRIM(:P_ROLE_NAME) IS NULL OR',
+    '           NOT REGEXP_LIKE(',
+    '               TRIM(:P_ROLE_NAME),',
+    '               ''^[A-Za-z][A-Za-z0-9 _-]*$''',
+    '           ) THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Invalid role name. Use English letters, numbers, spaces, hyphens or underscores.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '',
+    '        -- Check duplicate role name',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_ROLE_MASTER',
+    '        WHERE UPPER(TRIM(ROLE_NAME)) = UPPER(TRIM(:P_ROLE_NAME))',
+    '          AND ROLE_ID <> TO_NUMBER(:P_ROLE_ID);',
+    '',
+    '        IF L_COUNT > 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''This role name already exists. Please use a different name.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Validate priority',
+    '    IF L_ROLE_PRIORITY < 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role priority cannot be negative. Enter zero or a positive number.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'', ''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Update role',
+    '    UPDATE DEMO_ROLE_MASTER',
+    '    SET',
+    '        ROLE_NAME = COALESCE(TRIM(:P_ROLE_NAME), ROLE_NAME),',
+    '        ROLE_PRIORITY = COALESCE(L_ROLE_PRIORITY, ROLE_PRIORITY),',
+    '        IS_ACTIVE = COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), IS_ACTIVE)',
+    '    WHERE ROLE_ID = TO_NUMBER(:P_ROLE_ID);',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Role details updated successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN VALUE_ERROR THEN',
+    '        ROLLBACK TO UPDATE_ROLE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid numeric value. Please provide a valid Role ID and numeric priority.''',
+    '        );',
+    '',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPDATE_ROLE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role name already exists. Please use a different name.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPDATE_ROLE_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to update role due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030071238Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8711435816781564934)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8711434354711564929)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8711434829663564931)
+,p_param_name=>'P_ROLE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8711435369948564932)
+,p_param_name=>'P_ROLE_PRIORITY'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028063811Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8750610809059028808)
+,p_tool_name=>'update_role_page_access'
+,p_static_id=>'update-role-page-access'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are responsible for updating existing role-page access assignments in DEMO_ROLE_PAGE_ACCESS_MASTER.',
+'',
+'### Required workflow',
+'',
+'1. First identify the existing assignment using ROLE_PAGE_ACCESS_ID. Do not confuse ROLE_PAGE_ACCESS_ID with ROLE_ID or PAGE_ID.',
+'',
+'2. Call GET_ROLE_PAGE_ACCESS to retrieve the existing assignment and display its assignment ID, role name, page name, APEX page ID, and active status.',
+'',
+'3. If the user identifies an assignment by role name or page name, search existing assignments first. If multiple assignments match, ask the user to select the correct ROLE_PAGE_ACCESS_ID.',
+'',
+'4. When the user wants to change the role, display the active roles using this LOV:',
+'   SELECT ROLE_NAME AS D, ROLE_ID AS R',
+'   FROM DEMO_ROLE_MASTER',
+'   WHERE IS_ACTIVE = ''Y''',
+'   ORDER BY ROLE_PRIORITY, ROLE_NAME',
+'',
+'   Use the selected ROLE_ID return value.',
+'',
+'5. When the user wants to change the page, display active registered pages using this LOV:',
+'   SELECT PAGE_NAME || '' (APEX Page: '' || APEX_PAGE_ID || '')'' AS D,',
+'          PAGE_ID AS R',
+'   FROM DEMO_PAGE_MASTER',
+'   WHERE IS_ACTIVE = ''Y''',
+'   ORDER BY PAGE_NAME',
+'',
+'   Use the selected PAGE_ID return value, not APEX_PAGE_ID.',
+'',
+'6. If the user only wants to activate or deactivate the assignment, update IS_ACTIVE without changing ROLE_ID or PAGE_ID. Accept only Y or N.',
+'',
+'7. Update only the fields the user explicitly requests to change. Preserve existing values for fields not being changed.',
+'',
+'8. Before changing ROLE_ID or PAGE_ID, verify that the selected role and page exist and are active.',
+'',
+'9. Before updating, check whether the requested role-page combination is already assigned to another record. Do not create duplicate combinations.',
+'',
+'10. Do not execute UPDATE_ROLE_PAGE_ACCESS until the target assignment is identified and the requested changes are clear.',
+'',
+'11. Never modify ROLE_PAGE_ACCESS_ID or audit columns directly.',
+'',
+'12. Report success only after the database confirms the update. If no record matches, inform the user that the assignment was not found. If a constraint or database error occurs, report it accurately.',
+'',
+'13. This tool is only for updating existing assignments. Do not use it to create or delete assignments.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_ROLE_ID NUMBER;',
+    '    L_PAGE_ID NUMBER;',
+    '    L_COUNT   NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT UPDATE_ROLE_ACCESS_SP;',
+    '',
+    '    -- Validate assignment ID',
+    '    IF :P_ROLE_PAGE_ACCESS_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role-page access ID is required.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Convert input values safely',
+    '    L_ROLE_ID := TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_ROLE_ID)), ''''));',
+    '    L_PAGE_ID := TO_NUMBER(NULLIF(TRIM(TO_CHAR(:P_PAGE_ID)), ''''));',
+    '',
+    '    -- Check whether assignment exists',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_ROLE_PAGE_ACCESS_MASTER',
+    '    WHERE ROLE_PAGE_ACCESS_ID = TO_NUMBER(:P_ROLE_PAGE_ACCESS_ID);',
+    '',
+    '    IF L_COUNT = 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Role-page access record not found. Please provide a valid ID.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate status',
+    '    IF :P_IS_ACTIVE IS NOT NULL',
+    '       AND UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid status. Only Y or N is allowed.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate role',
+    '    IF L_ROLE_ID IS NOT NULL THEN',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_ROLE_MASTER',
+    '        WHERE ROLE_ID = L_ROLE_ID',
+    '          AND IS_ACTIVE = ''Y'';',
+    '',
+    '        IF L_COUNT = 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Selected role does not exist or is inactive.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Validate page',
+    '    IF L_PAGE_ID IS NOT NULL THEN',
+    '        SELECT COUNT(*)',
+    '        INTO L_COUNT',
+    '        FROM DEMO_PAGE_MASTER',
+    '        WHERE PAGE_ID = L_PAGE_ID',
+    '          AND IS_ACTIVE = ''Y'';',
+    '',
+    '        IF L_COUNT = 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(',
+    '                p_result => ''Selected page does not exist or is inactive.''',
+    '            );',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Check duplicate assignment',
+    '    SELECT COUNT(*)',
+    '    INTO L_COUNT',
+    '    FROM DEMO_ROLE_PAGE_ACCESS_MASTER',
+    '    WHERE ROLE_ID = COALESCE(L_ROLE_ID, ROLE_ID)',
+    '      AND PAGE_ID = COALESCE(L_PAGE_ID, PAGE_ID)',
+    '      AND ROLE_PAGE_ACCESS_ID <> TO_NUMBER(:P_ROLE_PAGE_ACCESS_ID);',
+    '',
+    '    IF L_COUNT > 0 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role already has access to the selected page.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Update assignment',
+    '    UPDATE DEMO_ROLE_PAGE_ACCESS_MASTER',
+    '    SET',
+    '        ROLE_ID = COALESCE(L_ROLE_ID, ROLE_ID),',
+    '        PAGE_ID = COALESCE(L_PAGE_ID, PAGE_ID),',
+    '        IS_ACTIVE = COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), IS_ACTIVE)',
+    '    WHERE ROLE_PAGE_ACCESS_ID = TO_NUMBER(:P_ROLE_PAGE_ACCESS_ID);',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: Role-page access updated successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN VALUE_ERROR THEN',
+    '        ROLLBACK TO UPDATE_ROLE_ACCESS_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Invalid numeric value. Please provide valid numeric IDs.''',
+    '        );',
+    '',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPDATE_ROLE_ACCESS_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''This role-page access assignment already exists.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPDATE_ROLE_ACCESS_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to update role-page access due to a database error. Please contact your administrator.''',
+    '        );',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030070951Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8750612783354028822)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8750612253925028820)
+,p_param_name=>'P_PAGE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8750611775644028818)
+,p_param_name=>'P_ROLE_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8750611152186028816)
+,p_param_name=>'P_ROLE_PAGE_ACCESS_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028085923Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(8323526239892045426)
+,p_tool_name=>'update_user'
+,p_static_id=>'update-user'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'When a user requests an update, identify the target user using USER_ID or email through GET_USER_DETAILS. Ask for the user''s identity or the changes needed if they are missing.',
+'',
+'Collect and validate the requested changes. Remember details already provided and ask only for missing information. Update only the specified fields and preserve all other values.',
+'',
+'Do not call UPDATE_USER until the target user and requested changes are clear and valid. Validate email addresses and active status, and handle duplicate emails gracefully.',
+'',
+'Never update passwords, password hashes, USER_ID, or audit fields through this tool. Report success only when the database confirms the update; otherwise, explain the error in friendly language.'))
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DECLARE',
+    '    L_OLD_EMAIL DEMO_USER_MASTER.EMAIL%TYPE;',
+    '    L_CNT NUMBER;',
+    'BEGIN',
+    '    SAVEPOINT UPDATE_USER_SP;',
+    '',
+    '    -- Validate user ID',
+    '    IF :P_USER_ID IS NULL THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result => ''User ID is required.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Check user exists',
+    '    BEGIN',
+    '        SELECT EMAIL INTO L_OLD_EMAIL',
+    '        FROM DEMO_USER_MASTER',
+    '        WHERE USER_ID = :P_USER_ID;',
+    '    EXCEPTION',
+    '        WHEN NO_DATA_FOUND THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result => ''User not found. Please provide a valid User ID.'');',
+    '            RETURN;',
+    '    END;',
+    '',
+    '    -- Validate names',
+    '    IF (:P_FIRST_NAME IS NOT NULL AND',
+    '        NOT REGEXP_LIKE(TRIM(:P_FIRST_NAME),''^[A-Za-z ]+$''))',
+    '       OR (:P_MIDDLE_NAME IS NOT NULL AND',
+    '        NOT REGEXP_LIKE(TRIM(:P_MIDDLE_NAME),''^[A-Za-z ]+$''))',
+    '       OR (:P_LAST_NAME IS NOT NULL AND',
+    '        NOT REGEXP_LIKE(TRIM(:P_LAST_NAME),''^[A-Za-z ]+$''))',
+    '    THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result => ''Names must contain only English letters and spaces.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate email',
+    '    IF :P_EMAIL IS NOT NULL THEN',
+    '        IF NOT REGEXP_LIKE(TRIM(:P_EMAIL),',
+    '        ''^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'') THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result => ''Please enter a valid email address.'');',
+    '            RETURN;',
+    '        END IF;',
+    '',
+    '        SELECT COUNT(*) INTO L_CNT',
+    '        FROM DEMO_USER_MASTER',
+    '        WHERE UPPER(TRIM(EMAIL)) = UPPER(TRIM(:P_EMAIL))',
+    '          AND USER_ID <> :P_USER_ID;',
+    '',
+    '        IF L_CNT > 0 THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result => ''Email already exists. Please use a different email address.'');',
+    '            RETURN;',
+    '        END IF;',
+    '',
+    '        IF UPPER(TRIM(:P_EMAIL)) <> UPPER(TRIM(L_OLD_EMAIL))',
+    '           AND :P_PASSWORD IS NULL THEN',
+    '            APEX_AI.SET_TOOL_RESULT(p_result => ''Email changed. Please provide a new password.'');',
+    '            RETURN;',
+    '        END IF;',
+    '    END IF;',
+    '',
+    '    -- Validate mobile',
+    '    IF :P_MOBILE IS NOT NULL AND',
+    '       NOT REGEXP_LIKE(TRIM(:P_MOBILE),''^[0-9]{10,15}$'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result => ''Mobile number must contain 10 to 15 digits.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate active status',
+    '    IF :P_IS_ACTIVE IS NOT NULL AND',
+    '       UPPER(TRIM(:P_IS_ACTIVE)) NOT IN (''Y'',''N'') THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result => ''IS_ACTIVE must be Y or N.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Validate password',
+    '    IF :P_PASSWORD IS NOT NULL AND LENGTH(:P_PASSWORD) < 8 THEN',
+    '        APEX_AI.SET_TOOL_RESULT(p_result => ''Password must contain at least 8 characters.'');',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    -- Update user',
+    '    UPDATE DEMO_USER_MASTER',
+    '    SET',
+    '        FIRST_NAME = COALESCE(TRIM(:P_FIRST_NAME), FIRST_NAME),',
+    '        MIDDLE_NAME = COALESCE(TRIM(:P_MIDDLE_NAME), MIDDLE_NAME),',
+    '        LAST_NAME = COALESCE(TRIM(:P_LAST_NAME), LAST_NAME),',
+    '        EMAIL = COALESCE(UPPER(TRIM(:P_EMAIL)), EMAIL),',
+    '        MOBILE = COALESCE(TRIM(:P_MOBILE), MOBILE),',
+    '        IS_ACTIVE = COALESCE(UPPER(TRIM(:P_IS_ACTIVE)), IS_ACTIVE),',
+    '        PASSWORD = COALESCE(:P_PASSWORD, PASSWORD)',
+    '    WHERE USER_ID = :P_USER_ID;',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(',
+    '        p_result => ''SUCCESS: User details updated successfully.''',
+    '    );',
+    '',
+    'EXCEPTION',
+    '    WHEN DUP_VAL_ON_INDEX THEN',
+    '        ROLLBACK TO UPDATE_USER_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Email address already exists. Please use a different email.''',
+    '        );',
+    '',
+    '    WHEN OTHERS THEN',
+    '        ROLLBACK TO UPDATE_USER_SP;',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            p_result => ''Unable to update user due to a database error. Please contact your application administrator.''',
+    '        );',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030064627Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323528514990045435)
+,p_param_name=>'P_EMAIL'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323527012043045432)
+,p_param_name=>'P_FIRST_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261030064627Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323529551694045437)
+,p_param_name=>'P_IS_ACTIVE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323528081763045434)
+,p_param_name=>'P_LAST_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323527520935045433)
+,p_param_name=>'P_MIDDLE_NAME'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323529070403045436)
+,p_param_name=>'P_MOBILE'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8375513734701645612)
+,p_param_name=>'P_PASSWORD'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>false
+,p_created_on=>wwv_flow_imp.dz('20261027094211Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027094211Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(8323526582666045430)
+,p_param_name=>'P_USER_ID'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027065816Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+end;
+/
 prompt --application/shared_components/navigation/lists/dynamic_navigation_menu
 begin
 wwv_flow_imp_shared.create_list(
@@ -376,7 +3523,11 @@ wwv_flow_imp_shared.create_list(
 '        NM.PARENT_MENU_ID,',
 '        NM.MENU_NAME,',
 '        NM.MENU_SEQ_ID,',
-'        COALESCE(NM.ICON_CLASS, NM.ICON, ''fa-file-o'') AS ICON_DISPLAY,',
+'        -- COALESCE(NM.ICON_CLASS, NM.ICON, ''fa-file-o'') AS ICON_DISPLAY,',
+'        TRIM(',
+'            NVL(NM.ICON, ''fa-file-o'') || '' '' ||',
+'            NVL(NM.ICON_CLASS, '''')',
+'        ) AS ICON_DISPLAY,',
 '        PM.APEX_PAGE_ID',
 '    FROM DEMO_USER_MASTER U',
 '    JOIN DEMO_USER_ROLE_ACCESS_MASTER URA ON U.USER_ID = URA.USER_ID',
@@ -420,9 +3571,9 @@ wwv_flow_imp_shared.create_list(
 'START WITH PARENT_MENU_ID IS NULL',
 'CONNECT BY PRIOR MENU_ID = PARENT_MENU_ID',
 'ORDER SIBLINGS BY MENU_SEQ_ID NULLS LAST;'))
-,p_version_scn=>'SH256:MD9k18sO19eFAfpeBMz5YblN9_C8BLofh9Voubj8M68'
+,p_version_scn=>'SH256:tKBICJrK6Rdpy38jszsPd40J-NE3jAkwUyfKiYDAigA'
 ,p_created_on=>wwv_flow_imp.dz('20261023063808Z')
-,p_updated_on=>wwv_flow_imp.dz('20261023063808Z')
+,p_updated_on=>wwv_flow_imp.dz('20261026061542Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -8104,7 +11255,7 @@ wwv_flow_imp_shared.create_menu(
 ,p_name=>'Breadcrumb'
 ,p_static_id=>'breadcrumb'
 ,p_created_on=>wwv_flow_imp.dz('20261022064850Z')
-,p_updated_on=>wwv_flow_imp.dz('20261023094805Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028053853Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -8116,6 +11267,17 @@ wwv_flow_imp_shared.create_menu_option(
 ,p_page_id=>16
 ,p_created_on=>wwv_flow_imp.dz('20261023094547Z')
 ,p_updated_on=>wwv_flow_imp.dz('20261023094547Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_menu_option(
+ p_id=>wwv_flow_imp.id(8694582977116825808)
+,p_short_name=>'Demo Page Master'
+,p_static_id=>'demo-page-master'
+,p_link=>'f?p=&APP_ID.:19:&APP_SESSION.::&DEBUG.:::'
+,p_page_id=>19
+,p_created_on=>wwv_flow_imp.dz('20261028053853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028053853Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -8436,7 +11598,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'13'
 ,p_created_on=>wwv_flow_imp.dz('20261022064851Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261023060948Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261030095651Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -15787,7 +18949,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'11'
 ,p_created_on=>wwv_flow_imp.dz('20261023094547Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261023094547Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261030095950Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -15806,6 +18968,57 @@ wwv_flow_imp_page.create_page_plug(
 ,p_menu_template_id=>4075790987805660140
 ,p_created_on=>wwv_flow_imp.dz('20261023094547Z')
 ,p_updated_on=>wwv_flow_imp.dz('20261023094547Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_button(
+ p_id=>wwv_flow_imp.id(8008297414628008601)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_imp.id(7108121834581107203)
+,p_button_name=>'AskAIAssistant'
+,p_static_id=>'askaiassistant'
+,p_show_as_disabled=>false
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#:t-Button--iconLeft'
+,p_button_template_id=>2086257187394300437
+,p_button_is_hot=>'Y'
+,p_button_image_alt=>'Ask AI Assistant'
+,p_button_position=>'NEXT'
+,p_warn_on_unsaved_changes=>null
+,p_icon_css_classes=>'fa-ai-prompt'
+,p_created_on=>wwv_flow_imp.dz('20261026112614Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027051716Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(8008297574397008602)
+,p_name=>'AI Assistant'
+,p_static_id=>'ai-assistant'
+,p_event_sequence=>10
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_imp.id(8008297414628008601)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'click'
+,p_created_on=>wwv_flow_imp.dz('20261027051716Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027051716Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(8008297637988008603)
+,p_event_id=>wwv_flow_imp.id(8008297574397008602)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_static_id=>'native-open-ai-assistant'
+,p_action=>'NATIVE_OPEN_AI_ASSISTANT'
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'display_as', 'DIALOG')).to_clob
+,p_ai_agent_id=>wwv_flow_imp.id(8026577617038066993)
+,p_created_on=>wwv_flow_imp.dz('20261027051716Z')
+,p_updated_on=>wwv_flow_imp.dz('20261027051716Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -15880,6 +19093,43 @@ wwv_flow_imp_page.create_page_plug(
 ,p_menu_template_id=>4075790987805660140
 ,p_created_on=>wwv_flow_imp.dz('20261023094805Z')
 ,p_updated_on=>wwv_flow_imp.dz('20261023094805Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+end;
+/
+prompt --application/pages/page_00019
+begin
+wwv_flow_imp_page.create_page(
+ p_id=>19
+,p_name=>'Demo Page Master'
+,p_alias=>'DEMO-PAGE-MASTER'
+,p_step_title=>'Demo Page Master'
+,p_autocomplete_on_off=>'OFF'
+,p_step_template=>4075783602716660119
+,p_page_template_options=>'#DEFAULT#'
+,p_protection_level=>'C'
+,p_page_component_map=>'11'
+,p_created_on=>wwv_flow_imp.dz('20261028053853Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261028053853Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_plug(
+ p_id=>wwv_flow_imp.id(8694582319240825802)
+,p_plug_name=>'Breadcrumb'
+,p_static_id=>'breadcrumb'
+,p_region_template_options=>'#DEFAULT#:t-BreadcrumbRegion--useBreadcrumbTitle'
+,p_component_template_options=>'#DEFAULT#'
+,p_plug_template=>2534890969069732905
+,p_plug_display_sequence=>10
+,p_plug_display_point=>'REGION_POSITION_01'
+,p_plug_item_display_point=>'ABOVE'
+,p_menu_id=>wwv_flow_imp.id(6739327071028788834)
+,p_plug_source_type=>'NATIVE_BREADCRUMB'
+,p_menu_template_id=>4075790987805660140
+,p_created_on=>wwv_flow_imp.dz('20261028053853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261028053853Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
