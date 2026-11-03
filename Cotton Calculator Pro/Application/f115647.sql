@@ -19,7 +19,7 @@ whenever sqlerror exit sql.sqlcode rollback
 begin
 wwv_flow_imp.import_begin (
  p_version_yyyy_mm_dd=>'2026.04.07'
-,p_release=>'26.2.0'
+,p_release=>'26.2.1'
 ,p_default_workspace_id=>1469318483006414895
 ,p_default_application_id=>115647
 ,p_default_id_offset=>0
@@ -33,7 +33,7 @@ prompt APPLICATION 115647 - Cotton Calculator Pro
 -- Application Export:
 --   Application:     115647
 --   Name:            Cotton Calculator Pro
---   Date and Time:   10:34 Friday October 23, 2026
+--   Date and Time:   06:03 Tuesday November 3, 2026
 --   Exported By:     ARCHIPATEL2632004@GMAIL.COM
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -41,12 +41,13 @@ prompt APPLICATION 115647 - Cotton Calculator Pro
 --       Items:                   53
 --       Processes:                4
 --       Regions:                 37
---       Buttons:                  1
---       Dynamic Actions:         17
+--       Buttons:                  2
+--       Dynamic Actions:         18
 --     Shared Components:
 --       Logic:
 --         Processes:              1
 --         Build Options:          1
+--         AI Agents:              1
 --       Navigation:
 --         Lists:                  2
 --         Breadcrumbs:            1
@@ -68,7 +69,7 @@ prompt APPLICATION 115647 - Cotton Calculator Pro
 --       Reports:
 --       E-Mail:
 --     Supporting Objects:  Included
---   Version:         26.2.0
+--   Version:         26.2.1
 --   Instance ID:     63113759365424
 --
 
@@ -112,12 +113,12 @@ wwv_imp_workspace.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cotton Calculator Pro'
 ,p_created_on=>wwv_flow_imp.dz('20261009060720Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261022052641Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261103054603Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_file_prefix=>nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>2461330131242
-,p_version_scn=>'15848168948490'
+,p_version_scn=>'15852789993904'
 ,p_print_server_type=>'INSTANCE'
 ,p_file_storage=>'DB'
 ,p_is_pwa=>'Y'
@@ -139,6 +140,51 @@ wwv_imp_workspace.create_flow(
 ,p_nav_bar_list_id=>wwv_flow_imp.id(1474875335334660576)
 ,p_nav_bar_list_template_id=>2850970698196720012
 ,p_nav_bar_template_options=>'#DEFAULT#'
+);
+end;
+/
+prompt --workspace/credentials/google_gemini
+begin
+wwv_imp_workspace.create_credential(
+ p_id=>9639100111803742497
+,p_name=>'Google Gemini'
+,p_static_id=>'google-gemini'
+,p_authentication_type=>'HTTP_HEADER'
+,p_prompt_on_install=>true
+,p_created_on=>wwv_flow_imp.dz('20261031072107Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031084339Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+end;
+/
+prompt --workspace/remote_servers/google_gemini_cotton_ginning_calculator
+begin
+wwv_imp_workspace.create_remote_server(
+ p_id=>9649222460496245925
+,p_name=>'Google Gemini Cotton Ginning Calculator'
+,p_static_id=>'google-gemini-cotton-ginning-calculator'
+,p_base_url=>nvl(wwv_flow_application_install.get_remote_server_base_url('google-gemini-cotton-ginning-calculator'),'https://generativelanguage.googleapis.com/v1beta')
+,p_https_host=>nvl(wwv_flow_application_install.get_remote_server_https_host('google-gemini-cotton-ginning-calculator'),'')
+,p_server_type=>'GENERATIVE_AI'
+,p_credential_id=>9639100111803742497
+,p_ai_provider_type=>'GEMINI'
+,p_ai_provider_api=>'INTERACTIONS'
+,p_ai_is_builder_service=>false
+,p_ai_is_default_for_new_apps=>true
+,p_ai_model_name=>nvl(wwv_flow_application_install.get_remote_server_ai_model('google-gemini-cotton-ginning-calculator'),'gemini-3.6-flash')
+,p_ai_oci_compartment_id=>nvl(wwv_flow_application_install.get_remote_server_ai_oci_comp('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_oci_serving_mode=>nvl(wwv_flow_application_install.get_remote_server_ai_oci_srvmd('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_oci_endpoint_id=>nvl(wwv_flow_application_install.get_remote_server_ai_oci_endpt('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_oci_project_id=>nvl(wwv_flow_application_install.get_remote_server_ai_oci_proj('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_http_headers=>nvl(wwv_flow_application_install.get_remote_server_ai_headers('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_attributes=>nvl(wwv_flow_application_install.get_remote_server_ai_attrs('google-gemini-cotton-ginning-calculator'),'')
+,p_ai_max_tokens=>nvl(wwv_flow_application_install.get_remote_server_ai_maxtokens('google-gemini-cotton-ginning-calculator'),'')
+,p_prompt_on_install=>false
+,p_created_on=>wwv_flow_imp.dz('20261031084501Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031084501Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
 end;
 /
@@ -315,6 +361,1027 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_version_scn=>'SH256:dRkCWi6vQMhdQUSqb0QlRls9iYcsZ93IPYrbTqFqJFE'
 ,p_created_on=>wwv_flow_imp.dz('20261009060720Z')
 ,p_updated_on=>wwv_flow_imp.dz('20261009060720Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+end;
+/
+prompt --application/shared_components/ai_agent/cotton_calculator_ai_agent
+begin
+wwv_flow_imp_shared.create_ai_agent(
+ p_id=>wwv_flow_imp.id(9664214396288610225)
+,p_name=>'Cotton Calculator AI Agent'
+,p_static_id=>'cotton-calculator-ai-agent'
+,p_remote_server_id=>9649222460496245925
+,p_system_prompt=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'You are **Cotton Calculator AI**, the intelligent assistant for Cotton Calculator Pro, an application designed for Cotton Ginning and Oil Mill calculations.',
+'',
+'Your job is to help users understand calculators, collect calculation inputs, execute available AI tools, and explain results accurately.',
+'',
+'## 1. Application Modules',
+'',
+'**COTTON GINNING**',
+'1. Ginning Parity - Calculates net ginning cost per 355.62 kg lint candy.',
+'2. Reverse Parity - Calculates maximum/reverse kapas rate.',
+'3. Ginning Output Ratio - Calculates lint, seed, waste and total percentages.',
+'',
+'**OIL MILL**',
+'1. Khal Cost - Calculates cake/khal cost.',
+'2. Crushing Profit & Loss - Calculates crushing profitability.',
+'3. Oil Recovery - Calculates oil, cake and waste quantities and percentages.',
+'',
+'## 2. Available AI Tool',
+'',
+'Tool name: `calculate_ginning_parity`',
+'',
+'Use this tool whenever the user requests cotton ginning parity.',
+'',
+'Required parameters:',
+'- P_KAPAS_RATE',
+'- P_KAPAS_UNIT',
+'- P_SEED_RATE',
+'- P_SEED_UNIT',
+'- P_EXPENSE_PER_MAUND',
+'- P_EXPECTED_GOT',
+'- P_EXPECTED_SHORTAGE',
+'',
+'Allowed units for kapas and seed: 20 or 100.',
+'',
+'Always collect all required inputs before calling the tool.',
+'',
+'## 3. Calculation Rules',
+'',
+'1. Never invent or guess calculation results.',
+'2. Never independently calculate ginning parity when the Oracle tool is available.',
+'3. Always use the registered tool for supported calculations.',
+'4. Never modify or replace existing Oracle PL/SQL calculation formulas.',
+'5. Ask the user for missing inputs before calling a tool.',
+'6. Respect the units provided by the user.',
+'7. Display the exact result returned by Oracle.',
+'8. If Oracle returns an error, explain it clearly.',
+'9. Never claim a tool was executed if it was not.',
+'10. Do not pretend other calculator tools are available until they are registered.',
+'',
+'For Reverse Parity, Output Ratio, Khal Cost, Crushing P&L and Oil Recovery, guide the user to the corresponding application calculator until their AI tools are configured.',
+'',
+'## 4. Conversation Behavior',
+'',
+'- Understand English, Hindi and Hinglish.',
+'- Respond in the language used by the user.',
+'- Be professional, friendly and concise.',
+'- Remember previously supplied inputs during the current conversation.',
+'- Do not ask again for information already provided.',
+'- If the user changes one input, retain other confirmed inputs.',
+'- Explain technical terms in simple language.',
+'- Help users understand GOT, shortage, lint, kapas, seed, oil recovery, cake and waste.',
+'',
+'## 5. Ginning Parity Knowledge',
+'',
+'- Calculation basis: 355.62 kg lint candy.',
+'- Kapas and seed rates can be per 20 kg or 100 kg.',
+'- Processing expense is per 20 kg maund.',
+'- GOT represents lint recovery percentage.',
+'- Shortage represents expected shortage percentage.',
+'',
+'Do not confuse parity with the market selling price.',
+'',
+'## 6. Response Format',
+'',
+'For calculation results, use:',
+'',
+'**Cotton Ginning Parity Result**',
+'',
+'- Kapas Rate: Provided input',
+'- Seed Rate: Provided input',
+'- Processing Expense: Provided input',
+'- GOT: Provided percentage',
+'- Shortage: Provided percentage',
+'',
+'**Calculated Parity:** Exact Oracle result',
+'',
+'**Basis'))
+,p_welcome_message=>wwv_flow_string.join(wwv_flow_t_varchar2(
+unistr('<strong>\D83D\DC4B Welcome to Cotton Calculator AI!</strong><br>'),
+'',
+'Your intelligent assistant for Cotton Ginning and Oil Mill calculations.<br>',
+'',
+'I can help you understand calculator inputs, perform supported calculations, and explain your results.<br><br>',
+'',
+unistr('<strong>\D83C\DF31 Cotton Ginning</strong><br>'),
+'- Ginning Parity<br>',
+'- Reverse Parity<br>',
+'- Ginning Output Ratio<br><br>',
+'',
+unistr('<strong>\D83C\DFED Oil Mill</strong><br>'),
+'- Khal Cost<br>',
+'- Crushing Profit & Loss<br>',
+'- Oil Recovery<br><br>',
+'',
+unistr('<strong>\D83D\DCA1 How can I help you today?</strong><br>'),
+'',
+'<strong>Try asking:</strong><br>',
+'- "Calculate ginning parity."<br>',
+'- "Explain GOT and shortage."<br>',
+'- "How does reverse parity work?"<br>',
+'- "Explain oil recovery calculation."<br>',
+'- "How can I calculate crushing profit?"<br>'))
+,p_version_scn=>'SH256:yxhqHG7zcvALtamYeP4L12AK9qFHjmCWlrCR45dtbsE'
+,p_created_on=>wwv_flow_imp.dz('20261031104937Z')
+,p_updated_on=>wwv_flow_imp.dz('20261103054603Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(10074714347765256492)
+,p_tool_name=>'calculate_ginning_output_ratio'
+,p_static_id=>'calculate-ginning-output-ratio'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate cotton ginning output ratio using the existing',
+'Oracle PL/SQL calculation function.',
+'',
+'Calculate:',
+'1. Lint Percentage',
+'2. Seed Percentage',
+'3. Waste Percentage',
+'4. Total Output Percentage',
+'',
+'Required inputs:',
+'- Input Weight',
+'- Lint Weight',
+'- Seed Weight',
+'- Waste Weight',
+'- Weight Unit (G or KG)',
+'',
+'All weights must use the same unit.',
+'',
+'Use this tool whenever the user asks about cotton',
+'ginning output, lint recovery, seed recovery,',
+'waste percentage or total output percentage.',
+'',
+'Never calculate the percentages independently.',
+'Always use the registered Oracle tool.',
+'Ask for missing inputs before execution.',
+'Display the exact results returned by Oracle.'))
+,p_notification_message=>'Cotton Ginning Output Ratio calculated successfullly'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_LINT_PERCENT  VARCHAR2(4000);',
+    '    L_SEED_PERCENT  VARCHAR2(4000);',
+    '    L_WASTE_PERCENT VARCHAR2(4000);',
+    '    L_TOTAL_PERCENT VARCHAR2(4000);',
+    '    L_RESULT        VARCHAR2(4000);',
+    'BEGIN',
+    '    -- Calculate Lint Percentage',
+    '    L_LINT_PERCENT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_OUTPUT_RATIO(',
+    '            P_INPUT_WEIGHT    => :P_INPUT_WEIGHT,',
+    '            P_LINT_WEIGHT     => :P_LINT_WEIGHT,',
+    '            P_SEED_WEIGHT     => :P_SEED_WEIGHT,',
+    '            P_WASTE_WEIGHT    => :P_WASTE_WEIGHT,',
+    '            P_WEIGHT_UNIT     => :P_WEIGHT_UNIT,',
+    '            P_PERCENTAGE_TYPE => ''LINT''',
+    '        );',
+    '',
+    '    -- Calculate Seed Percentage',
+    '    L_SEED_PERCENT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_OUTPUT_RATIO(',
+    '            P_INPUT_WEIGHT    => :P_INPUT_WEIGHT,',
+    '            P_LINT_WEIGHT     => :P_LINT_WEIGHT,',
+    '            P_SEED_WEIGHT     => :P_SEED_WEIGHT,',
+    '            P_WASTE_WEIGHT    => :P_WASTE_WEIGHT,',
+    '            P_WEIGHT_UNIT     => :P_WEIGHT_UNIT,',
+    '            P_PERCENTAGE_TYPE => ''SEED''',
+    '        );',
+    '',
+    '    -- Calculate Waste Percentage',
+    '    L_WASTE_PERCENT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_OUTPUT_RATIO(',
+    '            P_INPUT_WEIGHT    => :P_INPUT_WEIGHT,',
+    '            P_LINT_WEIGHT     => :P_LINT_WEIGHT,',
+    '            P_SEED_WEIGHT     => :P_SEED_WEIGHT,',
+    '            P_WASTE_WEIGHT    => :P_WASTE_WEIGHT,',
+    '            P_WEIGHT_UNIT     => :P_WEIGHT_UNIT,',
+    '            P_PERCENTAGE_TYPE => ''WASTE''',
+    '        );',
+    '',
+    '    -- Calculate Total Output Percentage',
+    '    L_TOTAL_PERCENT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_OUTPUT_RATIO(',
+    '            P_INPUT_WEIGHT    => :P_INPUT_WEIGHT,',
+    '            P_LINT_WEIGHT     => :P_LINT_WEIGHT,',
+    '            P_SEED_WEIGHT     => :P_SEED_WEIGHT,',
+    '            P_WASTE_WEIGHT    => :P_WASTE_WEIGHT,',
+    '            P_WEIGHT_UNIT     => :P_WEIGHT_UNIT,',
+    '            P_PERCENTAGE_TYPE => ''TOTAL''',
+    '        );',
+    '',
+    '    -- Prepare complete output',
+    '    L_RESULT :=',
+    '          ''Cotton Ginning Output Ratio''',
+    '        || CHR(10)',
+    '        || ''Input Weight: '' || :P_INPUT_WEIGHT || '' '' || UPPER(:P_WEIGHT_UNIT)',
+    '        || CHR(10)',
+    '        || ''Lint Weight: '' || :P_LINT_WEIGHT || '' '' || UPPER(:P_WEIGHT_UNIT)',
+    '        || CHR(10)',
+    '        || ''Lint Percentage: '' || L_LINT_PERCENT || ''%''',
+    '        || CHR(10)',
+    '        || ''Seed Weight: '' || :P_SEED_WEIGHT || '' '' || UPPER(:P_WEIGHT_UNIT)',
+    '        || CHR(10)',
+    '        || ''Seed Percentage: '' || L_SEED_PERCENT || ''%''',
+    '        || CHR(10)',
+    '        || ''Waste Weight: '' || :P_WASTE_WEIGHT || '' '' || UPPER(:P_WEIGHT_UNIT)',
+    '        || CHR(10)',
+    '        || ''Waste Percentage: '' || L_WASTE_PERCENT || ''%''',
+    '        || CHR(10)',
+    '        || ''Total Output Percentage: '' || L_TOTAL_PERCENT || ''%'';',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10074714643817256503)
+,p_param_name=>'P_INPUT_WEIGHT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10074715179658256506)
+,p_param_name=>'P_LINT_WEIGHT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10074715635419256507)
+,p_param_name=>'P_SEED_WEIGHT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10074717041225256509)
+,p_param_name=>'P_WASTE_WEIGHT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10074717537777256510)
+,p_param_name=>'P_WEIGHT_UNIT'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102051327Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9669762061072677461)
+,p_tool_name=>'calculate_ginning_parity'
+,p_static_id=>'calculate-ginning-parity'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate cotton ginning parity using the existing',
+'Oracle PL/SQL calculation function.',
+'',
+'Use this tool whenever the user asks for:',
+'- Cotton ginning parity',
+'- Kapas parity',
+'- Ginning cost per candy',
+'- Net kapas parity',
+'',
+'Required inputs:',
+'1. Kapas rate and unit',
+'2. Seed rate and unit',
+'3. Expense per maund',
+'4. Expected GOT percentage',
+'5. Expected shortage percentage',
+'',
+'Do not calculate the result yourself.',
+'Always invoke this tool for actual parity calculations.',
+'Ask the user for any missing inputs before invoking it.'))
+,p_notification_message=>'Parity Calculated Correctly'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_RESULT VARCHAR2(4000);',
+    'BEGIN',
+    '    -- Call existing ginning parity function',
+    '    L_RESULT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_PARITY(',
+    '            P_KAPAS_RATE        => :P_KAPAS_RATE,',
+    '            P_KAPAS_UNIT        => :P_KAPAS_UNIT,',
+    '            P_SEED_RATE         => :P_SEED_RATE,',
+    '            P_SEED_UNIT         => :P_SEED_UNIT,',
+    '            P_EXPENSE_PER_MAUND => :P_EXPENSE_PER_MAUND,',
+    '            P_EXPECTED_GOT      => :P_EXPECTED_GOT,',
+    '            P_EXPECTED_SHORTAGE => :P_EXPECTED_SHORTAGE',
+    '        );',
+    '',
+    '    -- Return result to AI Agent',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110108Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669764811462677476)
+,p_param_name=>'P_EXPECTED_GOT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669765505112677477)
+,p_param_name=>'P_EXPECTED_SHORTAGE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669764357709677474)
+,p_param_name=>'P_EXPENSE_PER_MAUND'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669762309773677468)
+,p_param_name=>'P_KAPAS_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669762826136677470)
+,p_param_name=>'P_KAPAS_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669763324506677471)
+,p_param_name=>'P_SEED_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9669763824646677473)
+,p_param_name=>'P_SEED_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031110050Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(10101454880941352971)
+,p_tool_name=>'calculate_oil_mill_kal_cost'
+,p_static_id=>'calculate-oil-mill-kal-cost'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate Oil Mill Khal/Cake Cost using the existing',
+'Oracle PL/SQL calculation function.',
+'',
+'Use this tool when the user asks for:',
+'- Khal Cost',
+'- Cake Cost',
+'- Oil Mill Khal Parity',
+'- Cost Per KG',
+'- Cost Per Bag',
+'- Cost Per 20 KG, 50 KG or 100 KG',
+'',
+'Required inputs:',
+'1. Seed Purchase Rate',
+'2. Seed Purchase Unit',
+'3. Oil Selling Rate',
+'4. Oil Selling Unit',
+'5. Processing Expense',
+'6. Processing Expense Unit',
+'7. Oil Recovery Percentage',
+'8. Cake Recovery Percentage',
+'9. Show Cost Per',
+'',
+'Supported seed units: 20, 100, 1000.',
+'Supported oil selling units: 1, 10, 15.',
+'Supported expense units: 20, 100, 1000.',
+'Supported output units: 1, 20, 50, 100.',
+'',
+'If the user selects BAG, pass 50 as the output unit.',
+'',
+'Ask for missing inputs before execution.',
+'Never calculate Khal cost independently.',
+'Always use the registered Oracle tool.',
+'Display the exact result returned by Oracle.'))
+,p_notification_message=>'Khal Cost calculated Successfully.'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_RESULT VARCHAR2(4000);',
+    '    L_SHOW_COST_PER VARCHAR2(10);',
+    'BEGIN',
+    '    -- Convert UI selection into supported database value',
+    '    L_SHOW_COST_PER :=',
+    '        CASE UPPER(TRIM(:P_SHOW_COST_PER))',
+    '            WHEN ''BAG'' THEN ''50''',
+    '            ELSE TRIM(:P_SHOW_COST_PER)',
+    '        END;',
+    '',
+    '    -- Call existing Oil Mill Khal Cost function',
+    '    L_RESULT :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_KHAL_PARITY(',
+    '            P_SEED_RATE          => :P_SEED_RATE,',
+    '            P_SEED_BUY_UNIT      => :P_SEED_BUY_UNIT,',
+    '            P_OIL_RATE           => :P_OIL_RATE,',
+    '            P_OIL_SELL_UNIT      => :P_OIL_SELL_UNIT,',
+    '            P_PROCESSING_EXPENSE => :P_PROCESSING_EXPENSE,',
+    '            P_EXPENSE_UNIT       => :P_EXPENSE_UNIT,',
+    '            P_OIL_PERCENT        => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT       => :P_CAKE_PERCENT,',
+    '            P_SHOW_COST_PER      => L_SHOW_COST_PER',
+    '        );',
+    '',
+    '    -- Return Oracle result to AI Agent',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101461374680352990)
+,p_param_name=>'P_CAKE_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101459988441352987)
+,p_param_name=>'P_EXPENSE_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101460804025352988)
+,p_param_name=>'P_OIL_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101456480470352983)
+,p_param_name=>'P_OIL_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101457172239352984)
+,p_param_name=>'P_OIL_SELL_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101458195157352985)
+,p_param_name=>'P_PROCESSING_EXPENSE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101455854753352981)
+,p_param_name=>'P_SEED_BUY_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101455391461352979)
+,p_param_name=>'P_SEED_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10101461879535352991)
+,p_param_name=>'P_SHOW_COST_PER'
+,p_data_type=>'VARCHAR2'
+,p_is_required=>true
+,p_allowed_values=>'["1"," 20"," 50"," 100"]'
+,p_created_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102063325Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(10115554985372996314)
+,p_tool_name=>'calculate_oil_mill_profit'
+,p_static_id=>'calculate-oil-mill-profit'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate Oil Mill Crushing Profit & Loss using the existing Oracle package function.',
+'',
+'This tool calculates crushing profitability based on seed purchase rate, oil selling rate, cake selling rate, processing expenses, oil recovery percentage, and cake recovery percentage.',
+'',
+'The calculation is performed per 1000 kg of seed.',
+'',
+'Required inputs:',
+'- Seed rate and purchase unit',
+'- Oil rate and selling unit',
+'- Cake rate and selling unit',
+'- Processing expense and expense unit',
+'- Oil recovery percentage',
+'- Cake recovery percentage',
+'',
+'Always collect all required inputs before calling this tool. Pass the user''s actual values and units without changing them. Return the exact result received from Oracle. Never invent or independently calculate the profit or loss.'))
+,p_notification_message=>'Oil Mill Profit Calculated Successfully.'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DECLARE',
+    '    L_RESULT VARCHAR2(4000);',
+    'BEGIN',
+    '    L_RESULT :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_CRUSHING_PL(',
+    '            P_SEED_RATE          => :P_SEED_RATE,',
+    '            P_SEED_BUY_UNIT      => :P_SEED_BUY_UNIT,',
+    '            P_OIL_RATE           => :P_OIL_RATE,',
+    '            P_OIL_SELL_UNIT      => :P_OIL_SELL_UNIT,',
+    '            P_CAKE_RATE          => :P_CAKE_RATE,',
+    '            P_CAKE_SELL_UNIT     => :P_CAKE_SELL_UNIT,',
+    '            P_PROCESSING_EXPENSE => :P_PROCESSING_EXPENSE,',
+    '            P_EXPENSE_UNIT       => :P_EXPENSE_UNIT,',
+    '            P_OIL_PERCENT        => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT       => :P_CAKE_PERCENT',
+    '        );',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115569434417996338)
+,p_param_name=>'P_CAKE_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115565084803996328)
+,p_param_name=>'P_CAKE_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115566799195996329)
+,p_param_name=>'P_CAKE_SELL_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115568423279996334)
+,p_param_name=>'P_EXPENSE_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115568949944996336)
+,p_param_name=>'P_OIL_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115562704198996325)
+,p_param_name=>'P_OIL_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115564184776996326)
+,p_param_name=>'P_OIL_SELL_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115567908057996331)
+,p_param_name=>'P_PROCESSING_EXPENSE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115561454743996323)
+,p_param_name=>'P_SEED_BUY_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10115559212264996321)
+,p_param_name=>'P_SEED_RATE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102071645Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(10143375039631429113)
+,p_tool_name=>'calculate_oil_recovery'
+,p_static_id=>'calculate-oil-recovery'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate Oil Mill Recovery using the existing Oracle package function.',
+'',
+'This tool calculates:',
+'- Oil recovery in KG and percentage',
+'- Cake recovery in KG and percentage',
+'- Waste recovery in KG and percentage',
+'',
+'Required inputs:',
+'- Input seed weight in KG',
+'- Oil recovery percentage',
+'- Cake recovery percentage',
+'',
+'Collect all required inputs before calling the tool. Pass the actual user-provided values. Return the exact calculation results received from Oracle. Do not invent or independently calculate results.'))
+,p_notification_message=>'Recovery for Oil mill Calculated Successfully.'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    'DECLARE',
+    '    L_OIL_KG     VARCHAR2(4000);',
+    '    L_OIL_PCT    VARCHAR2(4000);',
+    '    L_CAKE_KG    VARCHAR2(4000);',
+    '    L_CAKE_PCT   VARCHAR2(4000);',
+    '    L_WASTE_KG   VARCHAR2(4000);',
+    '    L_WASTE_PCT  VARCHAR2(4000);',
+    '    L_RESULT     VARCHAR2(4000);',
+    'BEGIN',
+    '    IF :P_INPUT_SEED_KG IS NULL',
+    '       OR :P_OIL_PERCENT IS NULL',
+    '       OR :P_CAKE_PERCENT IS NULL',
+    '    THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            ''Error: Input seed weight, oil percentage and cake percentage are required.''',
+    '        );',
+    '        RETURN;',
+    '    END IF;',
+    '',
+    '    L_OIL_KG :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''OIL_KG''',
+    '        );',
+    '',
+    '    L_OIL_PCT :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''OIL_PCT''',
+    '        );',
+    '',
+    '    L_CAKE_KG :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''CAKE_KG''',
+    '        );',
+    '',
+    '    L_CAKE_PCT :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''CAKE_PCT''',
+    '        );',
+    '',
+    '    L_WASTE_KG :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''WASTE_KG''',
+    '        );',
+    '',
+    '    L_WASTE_PCT :=',
+    '        PKG_OIL_MILL_CALCULATOR.CALCULATE_OIL_RECOVERY(',
+    '            P_INPUT_SEED_KG => :P_INPUT_SEED_KG,',
+    '            P_OIL_PERCENT   => :P_OIL_PERCENT,',
+    '            P_CAKE_PERCENT  => :P_CAKE_PERCENT,',
+    '            P_RETURN_TYPE   => ''WASTE_PCT''',
+    '        );',
+    '',
+    '    L_RESULT :=',
+    '          ''OIL MILL RECOVERY REPORT''',
+    '        || CHR(10) || ''Input Seed: '' || :P_INPUT_SEED_KG || '' KG''',
+    '        || CHR(10) || ''Oil Recovery: '' || L_OIL_KG || '' KG ('' || L_OIL_PCT || ''%)''',
+    '        || CHR(10) || ''Cake Recovery: '' || L_CAKE_KG || '' KG ('' || L_CAKE_PCT || ''%)''',
+    '        || CHR(10) || ''Waste Recovery: '' || L_WASTE_KG || '' KG ('' || L_WASTE_PCT || ''%)'';',
+    '',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    '',
+    'EXCEPTION',
+    '    WHEN OTHERS THEN',
+    '        APEX_AI.SET_TOOL_RESULT(',
+    '            ''Oil recovery calculation failed: '' || SQLERRM',
+    '        );',
+    'END;')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261103054603Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10143376351814429121)
+,p_param_name=>'P_CAKE_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10143375355095429118)
+,p_param_name=>'P_INPUT_SEED_KG'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(10143375824125429119)
+,p_param_name=>'P_OIL_PERCENT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_updated_on=>wwv_flow_imp.dz('20261102082853Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool(
+ p_id=>wwv_flow_imp.id(9686022616054718744)
+,p_tool_name=>'calculate_reverse_ginning_parity'
+,p_static_id=>'calculate-reverse-ginning-parity'
+,p_tool_type=>'NATIVE_EXECUTE_SERVER_SIDE_CODE'
+,p_execution_point=>'ON_DEMAND'
+,p_description=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Calculate reverse cotton ginning parity using the existing',
+'Oracle PL/SQL function.',
+'',
+'Use this tool when the user asks for:',
+'- Reverse Ginning Parity',
+'- Reverse Kapas Parity',
+'- Maximum Kapas Purchase Rate',
+'- Maximum Kapas Buying Price',
+'',
+'Required inputs:',
+'1. Lint Price',
+'2. Seed Price',
+'3. Seed Unit (20 or 100)',
+'4. Processing Expense',
+'5. GOT Percentage',
+'6. Shortage Percentage',
+'',
+'Ask for missing inputs before calling the tool.',
+'Never calculate the result independently.',
+'Return the exact result from Oracle.',
+'The result represents maximum Kapas rate per 20 kg maund.',
+'',
+'REVERSE GINNING PARITY:',
+'',
+'When the user requests reverse ginning parity or maximum',
+'kapas buying price, use calculate_reverse_ginning_parity.',
+'',
+'Collect all six required inputs before calling the tool.',
+'',
+'The Oracle function returns the maximum Kapas rate per',
+'20 kg maund.',
+'',
+'Never calculate this result independently.',
+'Display the exact result returned by Oracle.'))
+,p_notification_message=>'Reverse Parity Calculated Correctly'
+,p_notification_type=>'success'
+,p_requires_confirmation=>false
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'language', 'PLSQL',
+  'plsql_code', wwv_flow_string.join(wwv_flow_t_varchar2(
+    '',
+    'DECLARE',
+    '    L_RESULT VARCHAR2(4000);',
+    'BEGIN',
+    '    -- Call existing Reverse Parity function',
+    '    L_RESULT :=',
+    '        PKG_GINNING_CALCULATOR.F_CALCULATE_REVERSE_PARITY(',
+    '            P_LINT_PRICE => :P_LINT_PRICE,',
+    '            P_SEED_PRICE => :P_SEED_PRICE,',
+    '            P_SEED_UNIT  => :P_SEED_UNIT,',
+    '            P_EXPENSE    => :P_EXPENSE,',
+    '            P_GOT        => :P_GOT,',
+    '            P_SHORTAGE   => :P_SHORTAGE',
+    '        );',
+    '',
+    '    -- Return result to AI Agent',
+    '    APEX_AI.SET_TOOL_RESULT(L_RESULT);',
+    'END;',
+    '')))).to_clob
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686025157292718762)
+,p_param_name=>'P_EXPENSE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686025630894718764)
+,p_param_name=>'P_GOT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686023048617718755)
+,p_param_name=>'P_LINT_PRICE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686023564709718758)
+,p_param_name=>'P_SEED_PRICE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686024398535718760)
+,p_param_name=>'P_SEED_UNIT'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_shared.create_ai_agent_tool_param(
+ p_id=>wwv_flow_imp.id(9686026186921718766)
+,p_param_name=>'P_SHORTAGE'
+,p_data_type=>'NUMBER'
+,p_is_required=>true
+,p_created_on=>wwv_flow_imp.dz('20261031125029Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031125029Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -12991,7 +14058,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'D'
 ,p_page_component_map=>'14'
 ,p_created_on=>wwv_flow_imp.dz('20261009060720Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261021132235Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261031112358Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -13103,6 +14170,26 @@ wwv_flow_imp_page.create_page_plug(
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
+wwv_flow_imp_page.create_page_button(
+ p_id=>wwv_flow_imp.id(8008299305535008620)
+,p_button_sequence=>20
+,p_button_name=>'AI_Assistant'
+,p_static_id=>'ai-assistant_1'
+,p_show_as_disabled=>false
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#:t-Button--large:t-Button--primary:t-Button--link:t-Button--iconLeft:t-Button--hoverIconPush'
+,p_button_template_id=>2086257187394300437
+,p_button_is_hot=>'Y'
+,p_button_image_alt=>'AI Assistant'
+,p_button_position=>'AFTER_NAVIGATION_BAR'
+,p_warn_on_unsaved_changes=>null
+,p_button_css_classes=>'theme-btn'
+,p_icon_css_classes=>'fa-ai-prompt'
+,p_created_on=>wwv_flow_imp.dz('20261031112308Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031112358Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(45569502248901393608)
 ,p_name=>'P0_THEME_SWITCH'
@@ -13118,6 +14205,37 @@ wwv_flow_imp_page.create_page_item(
   'use_defaults', 'Y')).to_clob
 ,p_created_on=>wwv_flow_imp.dz('20261012052606Z')
 ,p_updated_on=>wwv_flow_imp.dz('20261021125217Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(8008299483561008621)
+,p_name=>'AI'
+,p_static_id=>'ai'
+,p_event_sequence=>30
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_imp.id(8008299305535008620)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'click'
+,p_created_on=>wwv_flow_imp.dz('20261031112308Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031112308Z')
+,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
+,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(8008299504112008622)
+,p_event_id=>wwv_flow_imp.id(8008299483561008621)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_static_id=>'native-open-ai-assistant'
+,p_action=>'NATIVE_OPEN_AI_ASSISTANT'
+,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
+  'display_as', 'DIALOG')).to_clob
+,p_ai_agent_id=>wwv_flow_imp.id(9664214396288610225)
+,p_created_on=>wwv_flow_imp.dz('20261031112308Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031112308Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -13299,7 +14417,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'13'
 ,p_created_on=>wwv_flow_imp.dz('20261009060721Z')
-,p_last_updated_on=>wwv_flow_imp.dz('20261021131816Z')
+,p_last_updated_on=>wwv_flow_imp.dz('20261031112329Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_last_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
@@ -13337,7 +14455,7 @@ wwv_flow_imp_page.create_page_plug(
 ,p_menu_template_id=>4075790987805660140
 ,p_required_patch=>wwv_flow_imp.id(1474873371313660568)
 ,p_created_on=>wwv_flow_imp.dz('20261009060721Z')
-,p_updated_on=>wwv_flow_imp.dz('20261015105054Z')
+,p_updated_on=>wwv_flow_imp.dz('20261031111529Z')
 ,p_created_by=>'ARCHIPATEL2632004@GMAIL.COM'
 ,p_updated_by=>'ARCHIPATEL2632004@GMAIL.COM'
 );
